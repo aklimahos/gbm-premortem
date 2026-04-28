@@ -281,6 +281,24 @@
     padding: 26px;
   }
 
+  /* Section labels inside the form */
+  .form-section {
+    margin-bottom: 28px;
+  }
+  .form-section:last-child {
+    margin-bottom: 0;
+  }
+  .form-section-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
   /* Form */
   .field {
     display: flex;
@@ -976,90 +994,34 @@
     <div class="panel-body">
       <form id="trial-form">
 
-        <div class="field-row">
-          <div class="field">
-            <label for="target_class">What kind of treatment is it?</label>
-            <select id="target_class" name="target_class" required>
-              <option value="">Select…</option>
-              <option value="anti-angiogenic">A drug that blocks tumor blood vessels (anti-angiogenic)</option>
-              <option value="immune checkpoint inhibitor (PD-1)">A drug that boosts the immune system (immunotherapy)</option>
-              <option value="cancer vaccine / cell therapy">A cancer vaccine or cell therapy</option>
-              <option value="kinase inhibitor">A drug that targets a specific tumor mutation</option>
-              <option value="alkylator chemotherapy">Chemotherapy</option>
-              <option value="device / physical therapy">A medical device</option>
-              <option value="other">Something else</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="setting">When would patients get it?</label>
-            <select id="setting" name="setting" required>
-              <option value="">Select…</option>
-              <option value="newly diagnosed">When first diagnosed</option>
-              <option value="recurrent">After the cancer comes back</option>
-              <option value="newly diagnosed AND recurrent">Both</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="biomarker">Including only a specific subgroup?</label>
-            <select id="biomarker" name="biomarker" required>
-              <option value="">Select…</option>
-              <option value="none (all-comers)">No, anyone with the disease</option>
-              <option value="biomarker-enriched (specific tumor mutation)">Yes, only patients with a specific tumor mutation</option>
-              <option value="patient-subgroup-enriched">Yes, only a specific patient subgroup</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="sample_size">Roughly how many patients?</label>
-            <select id="sample_size" name="sample_size" required>
-              <option value="">Select…</option>
-              <option value="small (under 50)">Small (under 50 patients)</option>
-              <option value="medium (50-200)">Medium (50 to 200 patients)</option>
-              <option value="large (200-1000)">Large (200 to 1,000 patients)</option>
-              <option value="very large (1000+)">Very large (over 1,000 patients)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="endpoint">What's the main outcome you're measuring?</label>
-            <select id="endpoint" name="endpoint" required>
-              <option value="">Select…</option>
-              <option value="OS (overall survival)">Patients living longer (overall survival)</option>
-              <option value="PFS (progression-free survival)">Cancer takes longer to come back (progression-free survival)</option>
-              <option value="ORR (response rate)">Tumor shrinks (response rate)</option>
-              <option value="safety / MTD">Safety and side effects only</option>
-              <option value="co-primary OS and PFS">Both living longer AND tumor control (co-primary)</option>
-              <option value="other endpoint">Something else</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="comparator">What are you comparing the treatment against?</label>
-            <select id="comparator" name="comparator" required>
-              <option value="">Select…</option>
-              <option value="placebo or no treatment">A placebo or no treatment</option>
-              <option value="standard of care">The current standard treatment</option>
-              <option value="active comparator drug">Another active drug</option>
-              <option value="single-arm (no comparator)">No comparison group (everyone gets the new treatment)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="combination">Is the drug given alone or with other treatments?</label>
-            <select id="combination" name="combination" required>
-              <option value="">Select…</option>
-              <option value="monotherapy">Just this treatment alone</option>
-              <option value="combo with standard chemo and radiation">With standard chemotherapy and radiation</option>
-              <option value="combo with chemo only">With chemotherapy only</option>
-              <option value="combo with radiation only">With radiation only</option>
-              <option value="combo with another experimental drug">With another experimental drug</option>
-              <option value="combo with multiple existing treatments">With multiple existing treatments</option>
-            </select>
+        <div class="form-section">
+          <p class="form-section-label">The treatment</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="target_class">What kind of treatment is it?</label>
+              <select id="target_class" name="target_class" required>
+                <option value="">Select…</option>
+                <option value="anti-angiogenic">A drug that blocks tumor blood vessels (anti-angiogenic)</option>
+                <option value="immune checkpoint inhibitor (PD-1)">A drug that boosts the immune system (immunotherapy)</option>
+                <option value="cancer vaccine / cell therapy">A cancer vaccine or cell therapy</option>
+                <option value="kinase inhibitor">A drug that targets a specific tumor mutation</option>
+                <option value="alkylator chemotherapy">Chemotherapy</option>
+                <option value="device / physical therapy">A medical device</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="combination">Is it given alone or with other treatments?</label>
+              <select id="combination" name="combination" required>
+                <option value="">Select…</option>
+                <option value="monotherapy">Just this treatment alone</option>
+                <option value="combo with standard chemo and radiation">With standard chemotherapy and radiation</option>
+                <option value="combo with chemo only">With chemotherapy only</option>
+                <option value="combo with radiation only">With radiation only</option>
+                <option value="combo with another experimental drug">With another experimental drug</option>
+                <option value="combo with multiple existing treatments">With multiple existing treatments</option>
+              </select>
+            </div>
           </div>
           <div class="field">
             <label for="delivery">How does the drug reach the tumor?</label>
@@ -1070,6 +1032,68 @@
               <option value="injected directly into tumor (intratumoral / convection-enhanced delivery)">Injected directly into the tumor</option>
               <option value="device or physical intervention (not a drug)">A device or physical intervention</option>
               <option value="not specified / unsure">Not sure</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-label">The patients</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="setting">When would patients get it?</label>
+              <select id="setting" name="setting" required>
+                <option value="">Select…</option>
+                <option value="newly diagnosed">When first diagnosed</option>
+                <option value="recurrent">After the cancer comes back</option>
+                <option value="newly diagnosed AND recurrent">Both</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="biomarker">Including only a specific subgroup?</label>
+              <select id="biomarker" name="biomarker" required>
+                <option value="">Select…</option>
+                <option value="none (all-comers)">No, anyone with the disease</option>
+                <option value="biomarker-enriched (specific tumor mutation)">Yes, only patients with a specific tumor mutation</option>
+                <option value="patient-subgroup-enriched">Yes, only a specific patient subgroup</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="form-section-label">The trial design</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="sample_size">Roughly how many patients?</label>
+              <select id="sample_size" name="sample_size" required>
+                <option value="">Select…</option>
+                <option value="small (under 50)">Small (under 50 patients)</option>
+                <option value="medium (50-200)">Medium (50 to 200 patients)</option>
+                <option value="large (200-1000)">Large (200 to 1,000 patients)</option>
+                <option value="very large (1000+)">Very large (over 1,000 patients)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="endpoint">What's the main outcome you're measuring?</label>
+              <select id="endpoint" name="endpoint" required>
+                <option value="">Select…</option>
+                <option value="OS (overall survival)">Patients living longer (overall survival)</option>
+                <option value="PFS (progression-free survival)">Cancer takes longer to come back (progression-free survival)</option>
+                <option value="ORR (response rate)">Tumor shrinks (response rate)</option>
+                <option value="safety / MTD">Safety and side effects only</option>
+                <option value="co-primary OS and PFS">Both living longer AND tumor control (co-primary)</option>
+                <option value="other endpoint">Something else</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="comparator">What are you comparing the treatment against?</label>
+            <select id="comparator" name="comparator" required>
+              <option value="">Select…</option>
+              <option value="placebo or no treatment">A placebo or no treatment</option>
+              <option value="standard of care">The current standard treatment</option>
+              <option value="active comparator drug">Another active drug</option>
+              <option value="single-arm (no comparator)">No comparison group (everyone gets the new treatment)</option>
             </select>
           </div>
         </div>
