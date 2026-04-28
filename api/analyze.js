@@ -197,14 +197,22 @@ export default async function handler(req, res) {
     const target_class = body.target_class;
     const setting = body.setting;
     const biomarker = body.biomarker;
-    // Optional structured fields (fallback if not provided)
+    // Structured fields (fallback if not provided)
     const sample_size = body.sample_size || "not specified";
     const endpoint = body.endpoint || "not specified";
     const comparator = body.comparator || "not specified";
+    const combination = body.combination || "not specified";
+    const delivery = body.delivery || "not specified";
 
-    if (!description || !target_class || !setting || !biomarker) {
+    if (!target_class || !setting || !biomarker) {
       return res.status(400).json({ error: "Missing required fields." });
     }
+
+    // Description is now optional (the form went all-dropdown). Legacy clients
+    // may still send it; if so, append as additional context.
+    const descriptionBlock = description
+      ? `\n\nAdditional free-text context (parse for any other relevant details):\n${description}`
+      : "";
 
     const userMessage = `PROPOSED TRIAL DESIGN
 ======================
@@ -214,9 +222,8 @@ Biomarker enrichment:   ${biomarker}
 Sample size:            ${sample_size}
 Primary endpoint:       ${endpoint}
 Comparator arm:         ${comparator}
-
-Description (free text, parse out any other relevant details: drug, dose, mechanism, mechanism rationale, etc.):
-${description}
+Combination:            ${combination}
+Delivery to tumor:      ${delivery}${descriptionBlock}
 
 DATABASE - 31 GBM TRIALS
 =========================
@@ -224,7 +231,7 @@ ${JSON.stringify(trials, null, 2)}
 
 ${PATTERN_LIBRARY}
 
-Now produce the JSON pre-mortem analysis. Return ONLY the JSON object - start with { and end with }. No other text, no preamble, no markdown fences.`;
+Now produce the JSON pre-mortem analysis. The user filled out a structured 8-question form. Pattern-match against the database using the structured fields. If a critical detail is missing or marked "not specified", say so in your analysis rather than inventing it. Return ONLY the JSON object - start with { and end with }. No other text, no preamble, no markdown fences.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",

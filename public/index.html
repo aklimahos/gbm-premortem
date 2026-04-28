@@ -917,16 +917,10 @@
   <section class="panel">
     <div class="panel-header">
       <p class="panel-title">Your trial idea</p>
-      <span class="panel-step">7 questions</span>
+      <span class="panel-step">8 questions</span>
     </div>
     <div class="panel-body">
       <form id="trial-form">
-
-        <div class="field">
-          <label for="description">Tell us about your treatment idea</label>
-          <p class="hint">What's the treatment, who would get it, and what would you compare it against? Full sentences are fine. Don't overthink it.</p>
-          <textarea id="description" name="description" required placeholder="e.g. A drug that blocks blood vessel growth in tumors, given alongside standard chemo and radiation. Tested in about 600 newly-diagnosed brain cancer patients. Compared against the standard treatment alone."></textarea>
-        </div>
 
         <div class="field-row">
           <div class="field">
@@ -996,6 +990,32 @@
               <option value="standard of care">The current standard treatment</option>
               <option value="active comparator drug">Another active drug</option>
               <option value="single-arm (no comparator)">No comparison group (everyone gets the new treatment)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="combination">Is the drug given alone or with other treatments?</label>
+            <select id="combination" name="combination" required>
+              <option value="">Select…</option>
+              <option value="monotherapy">Just this treatment alone</option>
+              <option value="combo with standard chemo and radiation">With standard chemotherapy and radiation</option>
+              <option value="combo with chemo only">With chemotherapy only</option>
+              <option value="combo with radiation only">With radiation only</option>
+              <option value="combo with another experimental drug">With another experimental drug</option>
+              <option value="combo with multiple existing treatments">With multiple existing treatments</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="delivery">How does the drug reach the tumor?</label>
+            <select id="delivery" name="delivery" required>
+              <option value="">Select…</option>
+              <option value="crosses blood-brain barrier (CNS-penetrant)">Designed to cross the blood-brain barrier</option>
+              <option value="partial blood-brain barrier penetration">Partially crosses the blood-brain barrier</option>
+              <option value="injected directly into tumor (intratumoral / convection-enhanced delivery)">Injected directly into the tumor</option>
+              <option value="device or physical intervention (not a drug)">A device or physical intervention</option>
+              <option value="not specified / unsure">Not sure</option>
             </select>
           </div>
         </div>
