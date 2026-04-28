@@ -110,6 +110,17 @@
   .appbar-nav a.active {
     color: var(--primary);
   }
+  .appbar-updated {
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    padding-right: 8px;
+    border-right: 1px solid var(--rule);
+    margin-right: 4px;
+  }
+  @media (max-width: 640px) {
+    .appbar-updated { display: none; }
+  }
   @media (max-width: 520px) {
     .appbar-nav { gap: 14px; }
     .appbar-nav a { font-size: 12px; }
@@ -291,6 +302,136 @@
   }
   .why-text:last-child {
     margin-bottom: 0;
+  }
+
+  /* Retrospective validation section */
+  .validation {
+    margin: 0 0 36px;
+  }
+  .validation-header {
+    margin-bottom: 18px;
+  }
+  .validation-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .validation-heading {
+    font-family: var(--serif);
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 500;
+    margin: 0 0 8px;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    max-width: 560px;
+  }
+  .validation-sub {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 580px;
+  }
+  .validation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 22px;
+  }
+  @media (max-width: 720px) {
+    .validation-grid { grid-template-columns: 1fr; }
+  }
+  .validation-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 12px rgba(184, 106, 106, 0.05);
+    position: relative;
+  }
+  .validation-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .validation-card-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .validation-card-year {
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+  .validation-card-design {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin: 0 0 14px;
+    line-height: 1.45;
+  }
+  .validation-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .validation-col-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 6px;
+  }
+  .validation-col-verdict {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--high);
+    margin: 0 0 4px;
+    letter-spacing: 0.04em;
+  }
+  .validation-col-pattern {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: 0;
+  }
+  .validation-col-outcome {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 4px;
+    letter-spacing: 0.04em;
+  }
+  .validation-col-stats {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .validation-match {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--low-bg);
+    color: var(--low);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
   }
 
   /* Try-an-example buttons */
@@ -816,6 +957,35 @@
     line-height: 1.55;
     max-width: 580px;
   }
+  .db-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .db-filter {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .db-filter:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .db-filter.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
   .db-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1125,6 +1295,7 @@
       glio.ai
     </div>
     <nav class="appbar-nav">
+      <span class="appbar-updated">Updated Apr 2026</span>
       <a href="/about">Methodology</a>
       <a href="/disclaimer">Disclaimer</a>
     </nav>
@@ -1238,6 +1409,79 @@
     <div class="example">
       <span class="label">Example input → output</span>
       An anti-angiogenic drug, given alongside standard chemo and radiation, in 600 newly-diagnosed patients (no specific subgroup), measuring both survival and tumor progression. → "HIGH risk. 3 of 3 trials with this exact profile (AVAglio, RTOG 0825, EORTC 26101) failed."
+    </div>
+  </section>
+
+  <section class="validation">
+    <div class="validation-header">
+      <p class="validation-eyebrow">Retrospective validation</p>
+      <h2 class="validation-heading">What if we had this tool in 2013?</h2>
+      <p class="validation-sub">Three real Phase 3 glioblastoma trials, run through the same pattern matcher. Each was flagged HIGH risk for the exact failure mode that ultimately killed it.</p>
+    </div>
+
+    <div class="validation-grid">
+      <article class="validation-card">
+        <div class="validation-match">Match</div>
+        <div class="validation-card-head">
+          <span class="validation-card-title">CENTRIC</span>
+          <span class="validation-card-year">2013</span>
+        </div>
+        <p class="validation-card-design">Cilengitide added to standard care, n=545, MGMT-methylated newly-diagnosed GBM, OS endpoint.</p>
+        <div class="validation-compare">
+          <div>
+            <p class="validation-col-label">Tool verdict</p>
+            <p class="validation-col-verdict">HIGH</p>
+            <p class="validation-col-pattern">Phase 2 → Phase 3 effect-size collapse</p>
+          </div>
+          <div>
+            <p class="validation-col-label">Actual outcome</p>
+            <p class="validation-col-outcome">FAILED</p>
+            <p class="validation-col-stats">mOS 26.3 vs 26.3 mo<br>HR 1.02 · p=0.86</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="validation-card">
+        <div class="validation-match">Match</div>
+        <div class="validation-card-head">
+          <span class="validation-card-title">AVAglio</span>
+          <span class="validation-card-year">2013</span>
+        </div>
+        <p class="validation-card-design">Bevacizumab + standard chemo and radiation, n=921, all-comers newly-diagnosed GBM, co-primary OS and PFS.</p>
+        <div class="validation-compare">
+          <div>
+            <p class="validation-col-label">Tool verdict</p>
+            <p class="validation-col-verdict">HIGH</p>
+            <p class="validation-col-pattern">Pseudoresponse (anti-angiogenic class)</p>
+          </div>
+          <div>
+            <p class="validation-col-label">Actual outcome</p>
+            <p class="validation-col-outcome">FAILED</p>
+            <p class="validation-col-stats">PFS met, OS missed<br>HR 0.88 · p=0.10</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="validation-card">
+        <div class="validation-match">Match</div>
+        <div class="validation-card-head">
+          <span class="validation-card-title">CheckMate-498</span>
+          <span class="validation-card-year">2019</span>
+        </div>
+        <p class="validation-card-design">Nivolumab vs temozolomide, n=560, MGMT-unmethylated newly-diagnosed GBM, OS endpoint.</p>
+        <div class="validation-compare">
+          <div>
+            <p class="validation-col-label">Tool verdict</p>
+            <p class="validation-col-verdict">HIGH</p>
+            <p class="validation-col-pattern">Cold-tumor immune therapy failure</p>
+          </div>
+          <div>
+            <p class="validation-col-label">Actual outcome</p>
+            <p class="validation-col-outcome">FAILED</p>
+            <p class="validation-col-stats">mOS 13.4 vs 14.9 mo<br>HR 1.31 · p=0.0037</p>
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -1418,6 +1662,15 @@
       <p class="db-eyebrow">The database</p>
       <h2 class="db-heading">All 31 trials this tool checks against</h2>
     </div>
+    <div class="db-filters" id="db-filters">
+      <button class="db-filter active" data-filter="all">All trials</button>
+      <button class="db-filter" data-filter="anti-angiogenic">Anti-angiogenic</button>
+      <button class="db-filter" data-filter="immune checkpoint">Immunotherapy</button>
+      <button class="db-filter" data-filter="vaccine">Vaccines / cell therapy</button>
+      <button class="db-filter" data-filter="kinase">Targeted</button>
+      <button class="db-filter" data-filter="alkylator">Chemotherapy</button>
+      <button class="db-filter" data-filter="device">Device</button>
+    </div>
     <div id="trial-cards" class="db-grid">
       <p class="db-loading">Loading trials…</p>
     </div>
@@ -1571,17 +1824,47 @@ function escapeHtml(str) {
 
 // ----- Trial database browser -----
 
+// Cache of loaded trials so the filter doesn't re-fetch
+let LOADED_TRIALS = [];
+
 async function loadTrialDatabase() {
   const container = document.getElementById('trial-cards');
   if (!container) return;
   try {
     const response = await fetch('/api/trials');
     if (!response.ok) throw new Error('Server returned ' + response.status);
-    const trials = await response.json();
-    renderTrialCards(trials, container);
+    LOADED_TRIALS = await response.json();
+    renderTrialCards(LOADED_TRIALS, container);
+    wireFilterButtons();
   } catch (err) {
     container.innerHTML = '<p class="db-loading">Could not load the trial database. Try reloading the page.</p>';
   }
+}
+
+function wireFilterButtons() {
+  const filterRow = document.getElementById('db-filters');
+  if (!filterRow) return;
+  filterRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('.db-filter');
+    if (!btn) return;
+    // Mark active
+    filterRow.querySelectorAll('.db-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Filter and re-render
+    const filter = btn.dataset.filter;
+    const filtered = filter === 'all'
+      ? LOADED_TRIALS
+      : LOADED_TRIALS.filter(t => {
+          const cls = (t.target_class || '').toLowerCase();
+          return cls.includes(filter.toLowerCase());
+        });
+    const container = document.getElementById('trial-cards');
+    if (filtered.length === 0) {
+      container.innerHTML = '<p class="db-loading">No trials in this category.</p>';
+    } else {
+      renderTrialCards(filtered, container);
+    }
+  });
 }
 
 function renderTrialCards(trials, container) {
