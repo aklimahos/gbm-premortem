@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disclaimer · glio.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7EEE6;
+    --surface: #FFFFFF;
+    --surface-soft: #FDF8F3;
+    --ink: #2C211D;
+    --ink-soft: #5E4C44;
+    --ink-muted: #9A867B;
+    --rule: #EBDFD3;
+    --rule-soft: #F4EBE0;
+    --primary: #B86A6A;
+    --primary-hover: #A35454;
+    --accent-soft: #F8E6E3;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse at top right, rgba(212, 151, 151, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(184, 106, 106, 0.05), transparent 50%);
+    background-attachment: fixed;
+  }
+
+  .appbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 1px 0 rgba(184, 106, 106, 0.04);
+  }
+  .appbar-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .brand-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .nav-back {
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav-back:hover { color: var(--primary); }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 28px 96px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 40px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+  .lede {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 36px;
+    max-width: 600px;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 500;
+    margin: 36px 0 14px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  h2:first-of-type { margin-top: 24px; }
+
+  p {
+    margin: 0 0 16px;
+    color: var(--ink-soft);
+  }
+  p strong { color: var(--ink); }
+
+  ul {
+    margin: 0 0 18px;
+    padding-left: 22px;
+    color: var(--ink-soft);
+  }
+  ul li {
+    margin-bottom: 6px;
+  }
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(184, 106, 106, 0.3);
+    padding-bottom: 1px;
+  }
+  a:hover { color: var(--primary-hover); border-bottom-color: var(--primary); }
+
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--primary);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 22px 0;
+    color: var(--ink);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .callout strong {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  footer .footer-links {
+    margin-bottom: 8px;
+  }
+  footer .footer-links a {
+    color: var(--ink-soft);
+    border-bottom: none;
+    margin-right: 16px;
+  }
+  footer .footer-links a:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <a class="brand" href="/">
+      <span class="brand-dot"></span>
+      glio.ai
+    </a>
+    <a class="nav-back" href="/">← Back to tool</a>
+  </div>
+</header>
+
+<main class="page">
+
+  <p class="eyebrow">Disclaimer</p>
+  <h1>What this is and isn't.</h1>
+  <p class="lede">glio.ai is a research and educational tool. It is not a medical, regulatory, or statistical authority. Read this page before relying on the tool's output for any decision that matters.</p>
+
+  <div class="callout">
+    <strong>Short version</strong>
+    This site provides AI-generated pattern matching against a small, manually curated database. It is not a substitute for biostatistical review, regulatory advice, or clinical judgment. If you are making a real trial-design or treatment decision, consult licensed professionals.
+  </div>
+
+  <h2>This tool is not</h2>
+  <ul>
+    <li>A substitute for biostatistical or regulatory advice</li>
+    <li>A clinical decision-support tool</li>
+    <li>A predictor of trial approval probability or commercial success</li>
+    <li>A replacement for peer-reviewed scientific consultation</li>
+    <li>A diagnostic or treatment recommendation tool</li>
+    <li>A licensed medical device</li>
+  </ul>
+
+  <h2>If you are designing a real trial</h2>
+  <p>Consult, at minimum:</p>
+  <ul>
+    <li>A licensed biostatistician</li>
+    <li>Regulatory affairs counsel (FDA, EMA, or your jurisdiction's equivalent)</li>
+    <li>An institutional review board</li>
+    <li>Domain experts in your specific cancer indication and mechanism of action</li>
+  </ul>
+  <p>The output of glio.ai may be a useful starting point for those conversations. It is not a substitute for them.</p>
+
+  <h2>About the AI</h2>
+  <ul>
+    <li>All analyses are generated by Anthropic's Claude based on a curated database of 31 historical trials.</li>
+    <li>AI outputs are not deterministic. The same input may produce slightly varied results.</li>
+    <li>The AI may make errors, omit relevant context, or generate plausible-sounding analysis that is not fully grounded in the underlying data.</li>
+    <li>Always verify the underlying claims (trial names, hazard ratios, p-values) against the cited primary sources.</li>
+    <li>The AI does not have access to information beyond the curated database. It cannot pull live data from PubMed, ClinicalTrials.gov, or any external system.</li>
+  </ul>
+
+  <h2>About the database</h2>
+  <ul>
+    <li>The 31 trials in the database were curated by one person from publicly available sources.</li>
+    <li>31 trials is not a representative sample of the full GBM drug development landscape.</li>
+    <li>Pattern recognition across 31 cases is suggestive, not statistically powered prediction.</li>
+    <li>The author has done their best to verify each entry against primary publications, but errors are possible.</li>
+    <li>Trial outcomes can be reinterpreted as new data emerges. The database reflects published interpretations as of the last update date.</li>
+    <li>See the <a href="/about">methodology page</a> for full curation details and limitations.</li>
+  </ul>
+
+  <h2>Data privacy</h2>
+  <ul>
+    <li>No personal information, account information, or trial-design content is permanently stored on glio.ai's servers.</li>
+    <li>Trial-design inputs you submit are sent to Anthropic's Claude API for processing as ephemeral request bodies. They are not retained beyond the request lifecycle.</li>
+    <li>No analytics or tracking cookies beyond standard Vercel hosting infrastructure.</li>
+    <li>If you have specific privacy concerns, do not submit confidential, proprietary, or pre-publication trial design information through this tool.</li>
+  </ul>
+
+  <h2>Liability</h2>
+  <p>This tool is provided "as is" with no warranties of any kind, express or implied. The author and operators of glio.ai assume no liability for decisions made on the basis of this tool's output.</p>
+  <p>The tool may produce incorrect, incomplete, or misleading analysis. Users assume full responsibility for verifying outputs and for any consequences of relying on them.</p>
+
+  <h2>Reporting errors</h2>
+  <p>If you spot a factual error in the database, an incorrect citation, or a misleading analysis output, please report it via the <a href="/contact">contact page</a>. Honest, specific reports help the tool improve.</p>
+
+  <p style="margin-top: 36px; font-size: 13px; color: var(--ink-muted);">
+    Last updated: April 2026. This disclaimer may change as the tool evolves. Significant changes will be noted on the <a href="/about">about page</a> changelog.
+  </p>
+
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/disclaimer">Disclaimer</a>
+    <a href="/contact">Contact</a>
+  </div>
+  Built by Aklima Hossain · Not affiliated with any pharmaceutical company or regulatory body
+</footer>
+
+</body>
+</html>

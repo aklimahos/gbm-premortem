@@ -2,8 +2,12 @@
   "version": 2,
   "buildCommand": null,
   "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/api/analyze", "destination": "/api/analyze" },
+    { "source": "/api/explain", "destination": "/api/explain" },
+    { "source": "/api/trials", "destination": "/api/trials" },
     { "source": "/(.*)", "destination": "/$1" }
   ],
   "functions": {

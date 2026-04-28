@@ -1073,6 +1073,20 @@
     line-height: 1.7;
     text-align: center;
   }
+  footer .footer-links {
+    margin-bottom: 12px;
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  footer .footer-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  footer .footer-links a:hover { color: var(--primary); }
   footer .heart {
     color: var(--primary);
   }
@@ -1385,8 +1399,12 @@
   </section>
 
   <footer>
-    Built by Aklima Hossain<br>
-    31-trial glioblastoma failure database · reasoning by Claude
+    <div class="footer-links">
+      <a href="/about">About / Methodology</a>
+      <a href="/disclaimer">Disclaimer</a>
+      <a href="/contact">Contact</a>
+    </div>
+    Built by Aklima Hossain · 31-trial glioblastoma failure database · reasoning by Claude
   </footer>
 
 </div>

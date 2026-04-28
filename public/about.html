@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About · glio.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7EEE6;
+    --surface: #FFFFFF;
+    --surface-soft: #FDF8F3;
+    --ink: #2C211D;
+    --ink-soft: #5E4C44;
+    --ink-muted: #9A867B;
+    --rule: #EBDFD3;
+    --rule-soft: #F4EBE0;
+    --primary: #B86A6A;
+    --primary-hover: #A35454;
+    --accent-soft: #F8E6E3;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse at top right, rgba(212, 151, 151, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(184, 106, 106, 0.05), transparent 50%);
+    background-attachment: fixed;
+  }
+
+  .appbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 1px 0 rgba(184, 106, 106, 0.04);
+  }
+  .appbar-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .brand-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .nav-back {
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav-back:hover { color: var(--primary); }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 28px 96px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 40px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+  .lede {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 36px;
+    max-width: 600px;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 500;
+    margin: 48px 0 14px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  h2:first-of-type { margin-top: 32px; }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 24px 0 8px;
+    color: var(--ink);
+  }
+
+  p {
+    margin: 0 0 16px;
+    color: var(--ink-soft);
+  }
+  p strong { color: var(--ink); }
+
+  ul {
+    margin: 0 0 18px;
+    padding-left: 22px;
+    color: var(--ink-soft);
+  }
+  ul li {
+    margin-bottom: 6px;
+  }
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(184, 106, 106, 0.3);
+    padding-bottom: 1px;
+  }
+  a:hover { color: var(--primary-hover); border-bottom-color: var(--primary); }
+
+  .meta-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 28px 0;
+    font-size: 14px;
+  }
+  .meta-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .meta-card-row:last-child { border-bottom: none; }
+  .meta-card-label {
+    color: var(--ink-muted);
+    font-size: 13px;
+  }
+  .meta-card-value {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .pattern-list {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin: 22px 0;
+  }
+  .pattern-list ol {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--ink-soft);
+  }
+  .pattern-list ol li {
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+  .pattern-list ol li strong {
+    color: var(--ink);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  footer .footer-links {
+    margin-bottom: 8px;
+  }
+  footer .footer-links a {
+    color: var(--ink-soft);
+    border-bottom: none;
+    margin-right: 16px;
+  }
+  footer .footer-links a:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <a class="brand" href="/">
+      <span class="brand-dot"></span>
+      glio.ai
+    </a>
+    <a class="nav-back" href="/">← Back to tool</a>
+  </div>
+</header>
+
+<main class="page">
+
+  <p class="eyebrow">About</p>
+  <h1>Behind glio.ai.</h1>
+  <p class="lede">A small, focused tool that pattern-matches proposed glioblastoma trial designs against a hand-curated database of 31 historical Phase 3 trials. Built to learn from past failures rather than repeat them.</p>
+
+  <h2>Why this exists</h2>
+  <p>Roughly 100,000 people die from glioblastoma every year worldwide. The standard treatment, the Stupp protocol, hasn't fundamentally changed since 2005. Despite billions of dollars and hundreds of trials, no drug has improved survival in two decades.</p>
+  <p>The reason isn't lack of trying. The field keeps running large, expensive trials that repeat the same patterns of failure: trials that improve a scan-based measure but not survival, trials that advance on borderline Phase 2 evidence, trials that test drugs which never reach the brain at therapeutic levels.</p>
+  <p>glio.ai is one small attempt to map those patterns and surface them when a new trial is being designed. Not as a regulator. Not as a biostatistician. As a structured second opinion grounded in what has already been tried and how it landed.</p>
+
+  <h2>Who built it</h2>
+  <p>glio.ai was built by <strong>Aklima Hossain</strong>, an undergraduate clinical research assistant with a Life Sciences background, focused on oncology trial design and quality assurance. The project is independent and not affiliated with any pharmaceutical company, regulatory body, or academic institution.</p>
+  <p>If you want to reach out, the <a href="/contact">contact page</a> has options.</p>
+
+  <h2>Methodology</h2>
+
+  <h3>How the database was built</h3>
+  <p>The 31 trials in the database were curated manually from the following sources:</p>
+  <ul>
+    <li><strong>Primary publications</strong> in peer-reviewed journals: Lancet Oncology, NEJM, JAMA Oncology, Journal of Clinical Oncology, Neuro-Oncology, Clinical Cancer Research, Nature Medicine.</li>
+    <li><strong>ClinicalTrials.gov</strong> for trial design details (NCT numbers, sample sizes, primary endpoints, randomization).</li>
+    <li><strong>Sponsor press releases and investor announcements</strong> for the sponsor's stated reason for outcome.</li>
+    <li><strong>PubMed</strong> for citation verification (PMIDs included where available).</li>
+  </ul>
+
+  <h3>Inclusion criteria</h3>
+  <ul>
+    <li>Phase 3 GBM trials with public readouts, plus the directly supporting Phase 2 trials for several entries.</li>
+    <li>Years 2005 to 2024.</li>
+    <li>Glioblastoma as the primary indication (excludes anaplastic astrocytoma except where noted).</li>
+    <li>Adult populations.</li>
+    <li>English-language primary publications.</li>
+  </ul>
+
+  <h3>Fields extracted per trial</h3>
+  <p>For each trial, the following fields were extracted and verified against the primary source:</p>
+  <ul>
+    <li>Trial name and NCT number</li>
+    <li>Drug, dose, and schedule</li>
+    <li>Mechanism of action</li>
+    <li>Target class (anti-angiogenic, checkpoint inhibitor, etc.)</li>
+    <li>Setting (newly diagnosed vs. recurrent)</li>
+    <li>Biomarker enrichment (MGMT methylation status, EGFR amplification, etc.)</li>
+    <li>Sample size</li>
+    <li>Primary endpoint and trial hypothesis</li>
+    <li>Key results: median overall survival, hazard ratio, p-value, whether the OS endpoint was met, whether the PFS endpoint was met</li>
+    <li>Sponsor's stated reason for outcome</li>
+    <li>Independent analysis (which failure pattern, if any)</li>
+    <li>Source citations (PMIDs)</li>
+  </ul>
+
+  <h3>The 9 failure patterns</h3>
+  <p>The pattern library was derived inductively by looking across the curated trials and identifying common modes of failure. Each pattern is named, defined, and tied to specific examples in the database.</p>
+  <div class="pattern-list">
+    <ol>
+      <li><strong>Phase 2 to Phase 3 effect-size collapse.</strong> Trial advanced on borderline Phase 2 evidence; the effect did not survive randomization.</li>
+      <li><strong>Pseudoresponse (anti-angiogenic class).</strong> Drug shrinks the imaging signal without changing tumor biology; PFS improves, OS does not.</li>
+      <li><strong>Cold-tumor immune therapy failure.</strong> GBM has low TMB and limited T-cell infiltrate; checkpoint inhibitors have failed across every subgroup tested.</li>
+      <li><strong>EGFR target frequency-vs-dependency mismatch.</strong> EGFR is amplified in roughly half of GBM but is not a true driver dependency.</li>
+      <li><strong>Standard-of-care drift.</strong> Phase 2 looked good against an outdated benchmark; by Phase 3 readout the contemporary control has improved.</li>
+      <li><strong>Active-comparator complications.</strong> Comparator arm has its own confounding effects (e.g., bevacizumab as control).</li>
+      <li><strong>Methodological corruption.</strong> Mid-trial endpoint changes, universal crossover, or comparison against external controls.</li>
+      <li><strong>PK or dose-schedule inadequacy.</strong> Drug given on a schedule that does not maintain therapeutic exposure given its half-life.</li>
+      <li><strong>Drug-class repeat failure.</strong> The proposed mechanism class has multiple prior Phase 3 failures in the indication for related reasons.</li>
+    </ol>
+  </div>
+
+  <h3>How AI is used</h3>
+  <p>The pre-mortem analysis is generated by Anthropic's Claude (Sonnet 4.6 for the trial-design analysis, Haiku 4.5 for individual trial deep-dives). The AI receives the full curated database plus the user's structured input and is instructed to ground every claim in the data provided.</p>
+  <p>The AI's job is pattern matching against the database, not novel statistical prediction. Specifically, the AI does not:</p>
+  <ul>
+    <li>Generate probabilities of regulatory approval</li>
+    <li>Run any kind of statistical model</li>
+    <li>Simulate trial outcomes</li>
+    <li>Replace biostatistical or regulatory consultation</li>
+  </ul>
+  <p>AI output is non-deterministic. The same input may produce slightly varied verdicts. Users should read the AI's reasoning, not just its risk rating.</p>
+
+  <h2>Limitations</h2>
+  <p>Honest about what this tool can and can't do:</p>
+  <ul>
+    <li><strong>Small dataset.</strong> 31 trials is a fraction of the full GBM drug development landscape. Citeline's enterprise database has 28,000+ oncology trials. Pattern recognition from 31 cases is suggestive, not statistically powered prediction.</li>
+    <li><strong>One-disease scope.</strong> The tool is designed for glioblastoma only. Findings do not transfer to other cancer types.</li>
+    <li><strong>One curator.</strong> The database reflects one person's choices about what counts as a failure, what fields matter, and which trials to include. Subjective bias is real.</li>
+    <li><strong>Phase 3 + supporting Phase 2 only.</strong> Phase 1 dose-escalation trials, expanded access, compassionate use, and most pediatric trials are excluded.</li>
+    <li><strong>Not peer-reviewed.</strong> The methodology has not been formally peer-reviewed or published.</li>
+    <li><strong>English-language only.</strong> Trials reported only in non-English journals are missing.</li>
+    <li><strong>2005-2024 window.</strong> Older trials and trials still ongoing are not represented.</li>
+  </ul>
+
+  <h2>What's next</h2>
+  <p>Planned: validation study (running the tool against known historical trials retrospectively), expansion to additional Phase 2 trials, and a methodology preprint on medRxiv.</p>
+
+  <h2>Acknowledgments</h2>
+  <ul>
+    <li><strong>PubMed and the National Library of Medicine</strong> for free public access to clinical trial publications.</li>
+    <li><strong>ClinicalTrials.gov</strong> for trial registration data.</li>
+    <li><strong>Anthropic</strong> for the Claude API that powers the analysis.</li>
+    <li><strong>Vercel</strong> for free hosting.</li>
+    <li>The clinical investigators, patients, and families whose participation in failed trials produced the lessons this tool draws on.</li>
+  </ul>
+
+  <div class="meta-card">
+    <div class="meta-card-row">
+      <span class="meta-card-label">Database last updated</span>
+      <span class="meta-card-value">April 2026</span>
+    </div>
+    <div class="meta-card-row">
+      <span class="meta-card-label">Trials in database</span>
+      <span class="meta-card-value">31</span>
+    </div>
+    <div class="meta-card-row">
+      <span class="meta-card-label">Latest readout included</span>
+      <span class="meta-card-value">ROAR (2022)</span>
+    </div>
+    <div class="meta-card-row">
+      <span class="meta-card-label">Date range</span>
+      <span class="meta-card-value">2005 – 2024</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/disclaimer">Disclaimer</a>
+    <a href="/contact">Contact</a>
+  </div>
+  Built by Aklima Hossain · Not affiliated with any pharmaceutical company or regulatory body
+</footer>
+
+</body>
+</html>
