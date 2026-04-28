@@ -10,14 +10,13 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Load the trial database from disk at module load time
 const trialsPath = path.join(process.cwd(), "data", "trials.json");
 const trials = JSON.parse(fs.readFileSync(trialsPath, "utf-8"));
 
 const PATTERN_LIBRARY = `
 KNOWN FAILURE PATTERNS IN THIS DATABASE (use these names verbatim when they fit):
 
-1. Phase 2 → Phase 3 effect-size collapse
+1. Phase 2 -> Phase 3 effect-size collapse
    Trial advanced on a Phase 2 result that was borderline (p ~0.03-0.10), small,
    or compared against historical controls. The Phase 3 effect was substantially
    smaller or absent. Examples in DB: CENTRIC, ACT IV, INTELLANCE-1 (advanced
@@ -43,11 +42,9 @@ KNOWN FAILURE PATTERNS IN THIS DATABASE (use these names verbatim when they fit)
    HIGH SEVERITY when mechanism targets EGFR.
 
 5. Standard-of-care drift / outdated historical control
-   Phase 2 looked good against an outdated historical OS benchmark (e.g., 16 mo
-   from older Stupp data). By Phase 3 readout, contemporary control arms have
-   improved (better surgery, MGMT selection, supportive care), erasing the
-   apparent benefit. Examples in DB: ACT IV. MEDIUM SEVERITY when Phase 2
-   compared to literature controls without contemporary calibration.
+   Phase 2 looked good against an outdated historical OS benchmark.
+   By Phase 3 readout, contemporary control arms have improved, erasing the
+   apparent benefit. Examples in DB: ACT IV. MEDIUM SEVERITY.
 
 6. Active-comparator complications
    Comparator arm has its own confounding effects (e.g., bevacizumab as control
@@ -62,12 +59,11 @@ KNOWN FAILURE PATTERNS IN THIS DATABASE (use these names verbatim when they fit)
 8. PK / dose-schedule inadequacy
    Drug given on a schedule that does not maintain therapeutic exposure given
    its half-life. Example in DB: CENTRIC (twice-weekly IV, half-life of hours).
-   MEDIUM SEVERITY when drug PK does not match dosing schedule.
+   MEDIUM SEVERITY.
 
 9. Drug-class repeat failure
    The proposed mechanism class has multiple prior Phase 3 failures in the
-   indication for related reasons. Use this when 2+ trials in the same class
-   appear in the database and have failed.
+   indication for related reasons.
 
 POSITIVE COMPARATORS (in DB, succeeded):
    Stupp 2005 (TMZ + RT), EF-14 (TTFields device), CeTeG (lomustine + TMZ in
@@ -80,10 +76,9 @@ Your job: read the user's proposed trial design, compare it against the database
 
 GROUNDING RULES:
 - Every claim about a past trial must be grounded in the database fields you are given. Do not invent trial names, drug effects, p-values, or hazard ratios.
-- When the database is thin (e.g., only one prior trial of a mechanism), say so rather than overclaiming.
+- When the database is thin, say so rather than overclaiming.
 - Quote specific numbers from the database when relevant (HRs, p-values, median OS).
 - Use the PATTERN_LIBRARY names verbatim. Do not invent new pattern names when an existing one fits.
-- If the user's design is genuinely novel, say so directly.
 
 TONE:
 - Direct, clinical, evidence-anchored. Like a senior MSL or clinical pharmacology reviewer.
@@ -111,7 +106,7 @@ The JSON object must have exactly this shape:
       "name": "Trial name from DB",
       "year": "2014",
       "outcome": "FAILED",
-      "outcome_stats": "mOS 26.3 vs 26.3 mo · HR 1.02 · p=0.86",
+      "outcome_stats": "mOS 26.3 vs 26.3 mo, HR 1.02, p=0.86",
       "match_reasoning": "2-3 sentences explaining why this trial is the most relevant comparator."
     }
   ],
@@ -131,7 +126,7 @@ Field constraints:
 CALIBRATION:
 - HIGH risk: design matches 2+ failure patterns OR has a single pattern with strong evidence (3+ similar prior failures).
 - MEDIUM risk: 1 pattern flagged, or thin database evidence in a concerning direction.
-- LOW risk: design avoids known failure patterns; resembles successful trials more.
+- LOW risk: design avoids known failure patterns.
 
 REMEMBER: Return ONLY the JSON object. Start with { and end with }. Nothing else.`;
 
@@ -140,14 +135,11 @@ REMEMBER: Return ONLY the JSON object. Start with { and end with }. Nothing else
 function extractJson(text) {
   if (!text) return null;
 
-  // Strip markdown code fences
   let cleaned = text.trim();
   cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
 
-  // Try direct parse first
   try { return JSON.parse(cleaned); } catch (_) {}
 
-  // Fall back to extracting the largest balanced {...} block
   const start = cleaned.indexOf("{");
   if (start === -1) return null;
 
@@ -179,7 +171,7 @@ export default async function handler(req, res) {
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return res.status(500).json({
-      error: "ANTHROPIC_API_KEY not configured. Set it in Vercel project settings → Environment Variables.",
+      error: "ANTHROPIC_API_KEY not configured. Set it in Vercel project settings -> Environment Variables.",
     });
   }
 
@@ -201,13 +193,13 @@ Primary endpoint: ${endpoint}
 Phase 2 evidence strength: ${phase2}
 Additional context: ${context || "(none provided)"}
 
-DATABASE — 21 GBM TRIALS
+DATABASE - 21 GBM TRIALS
 =========================
 ${JSON.stringify(trials, null, 2)}
 
 ${PATTERN_LIBRARY}
 
-Now produce the JSON pre-mortem analysis. Return ONLY the JSON object — start with { and end with }. No other text.`;
+Now produce the JSON pre-mortem analysis. Return ONLY the JSON object - start with { and end with }. No other text, no preamble, no markdown fences.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
@@ -215,17 +207,13 @@ Now produce the JSON pre-mortem analysis. Return ONLY the JSON object — start 
       system: SYSTEM_PROMPT,
       messages: [
         { role: "user", content: userMessage },
-        { role: "assistant", content: "{" },
       ],
     });
 
-    let text = message.content
+    const text = message.content
       .filter((b) => b.type === "text")
       .map((b) => b.text)
       .join("");
-
-    // Because we prefilled the assistant turn with "{", prepend it to the response
-    text = "{" + text;
 
     const parsed = extractJson(text);
     if (!parsed) {
