@@ -271,8 +271,15 @@
     margin-bottom: 20px;
   }
   .field-row .field { margin-bottom: 0; }
+  /* Align dropdowns at the same y-position even when labels wrap differently */
+  .field-row .field label {
+    min-height: 2.6em;
+    display: flex;
+    align-items: flex-end;
+  }
   @media (max-width: 560px) {
     .field-row { grid-template-columns: 1fr; }
+    .field-row .field label { min-height: auto; }
   }
 
   /* Submit */
@@ -747,7 +754,7 @@
     </div>
     <div class="panel-footer">
       <span class="footnote">~30 seconds</span>
-      <button type="submit" form="trial-form" id="submit-btn">Run pre-mortem</button>
+      <button type="submit" form="trial-form" id="submit-btn">Run your trial</button>
     </div>
   </section>
 
@@ -841,7 +848,7 @@ form.addEventListener('submit', async (e) => {
   } finally {
     loading.classList.remove('visible');
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Run pre-mortem';
+    submitBtn.textContent = 'Run your trial';
   }
 });
 
