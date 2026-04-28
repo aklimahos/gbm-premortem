@@ -713,10 +713,33 @@
     line-height: 1.5;
   }
   .trial-card-summary {
-    margin: 0;
+    margin: 0 0 10px;
     font-size: 13px;
     color: var(--ink-soft);
     line-height: 1.55;
+  }
+  .trial-card-link {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .trial-card-link:hover {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary);
+  }
+  .trial-card-link .arrow {
+    margin-left: 3px;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+  .trial-card-link:hover .arrow {
+    transform: translateX(2px);
   }
 
   /* Footer */
@@ -906,7 +929,6 @@
     <div class="db-header">
       <p class="db-eyebrow">The database</p>
       <h2 class="db-heading">All 31 trials this tool checks against</h2>
-      <p class="db-intro">Curated from PubMed, sorted by year. Each entry shows what the trial tested, the key result, and how it landed.</p>
     </div>
     <div id="trial-cards" class="db-grid">
       <p class="db-loading">Loading trials…</p>
@@ -1072,6 +1094,7 @@ function renderTrialCards(trials, container) {
     const outcome = inferOutcome(t);
     const stats = buildStatsLine(t);
     const summary = buildSummary(t);
+    const link = getPaperLink(t);
 
     const card = document.createElement('article');
     card.className = 'trial-card';
@@ -1087,9 +1110,31 @@ function renderTrialCards(trials, container) {
       <p class="trial-card-meta">${escapeHtml(t.target_class || '—')} · ${escapeHtml(t.setting || '—')} · n=${nStr}</p>
       ${stats ? `<p class="trial-card-stats">${escapeHtml(stats)}</p>` : ''}
       <p class="trial-card-summary">${escapeHtml(summary)}</p>
+      <a class="trial-card-link" href="${link.url}" target="_blank" rel="noopener noreferrer">
+        ${link.label}<span class="arrow">→</span>
+      </a>
     `;
     container.appendChild(card);
   });
+}
+
+function getPaperLink(t) {
+  // Try to extract a PMID from the notes field
+  const notes = (t.notes || '') + ' ' + (t.analysis || '');
+  const pmidMatch = notes.match(/PMID[:\s]+(\d{6,9})/i);
+  if (pmidMatch) {
+    return {
+      url: `https://pubmed.ncbi.nlm.nih.gov/${pmidMatch[1]}/`,
+      label: 'View paper'
+    };
+  }
+  // Fallback: PubMed search using trial name + glioblastoma
+  const cleanName = (t.name || '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  const searchTerm = encodeURIComponent(`${cleanName} glioblastoma`);
+  return {
+    url: `https://pubmed.ncbi.nlm.nih.gov/?term=${searchTerm}`,
+    label: 'Search PubMed'
+  };
 }
 
 function inferOutcome(t) {
