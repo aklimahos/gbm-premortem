@@ -1,9 +1,6 @@
 // /api/analyze.js
 // Vercel serverless function — receives a trial design, calls Claude with the
 // embedded GBM trial database, returns structured analysis as JSON.
-//
-// This file runs on Vercel's serverless infrastructure. Your ANTHROPIC_API_KEY
-// is set as an environment variable in Vercel (never exposed to the browser).
 
 import Anthropic from "@anthropic-ai/sdk";
 import fs from "fs";
@@ -17,13 +14,11 @@ const client = new Anthropic({
 const trialsPath = path.join(process.cwd(), "data", "trials.json");
 const trials = JSON.parse(fs.readFileSync(trialsPath, "utf-8"));
 
-// The patterns Aklima identified during her analysis. These give Claude
-// curated priors so it can name patterns precisely instead of inventing them.
 const PATTERN_LIBRARY = `
 KNOWN FAILURE PATTERNS IN THIS DATABASE (use these names verbatim when they fit):
 
 1. Phase 2 → Phase 3 effect-size collapse
-   Trial advanced on a Phase 2 result that was borderline (p ≈ 0.03–0.10), small,
+   Trial advanced on a Phase 2 result that was borderline (p ~0.03-0.10), small,
    or compared against historical controls. The Phase 3 effect was substantially
    smaller or absent. Examples in DB: CENTRIC, ACT IV, INTELLANCE-1 (advanced
    on INTELLANCE-2 p=0.06). HIGH SEVERITY when user's Phase 2 evidence is
@@ -76,60 +71,106 @@ KNOWN FAILURE PATTERNS IN THIS DATABASE (use these names verbatim when they fit)
 
 POSITIVE COMPARATORS (in DB, succeeded):
    Stupp 2005 (TMZ + RT), EF-14 (TTFields device), CeTeG (lomustine + TMZ in
-   MGMT-methylated). Use these as contrast — what successful approaches share.
+   MGMT-methylated). Use these as contrast.
 `;
 
-const SYSTEM_PROMPT = `You are a senior clinical research analyst conducting pre-mortem analysis on proposed Phase 3 glioblastoma trials. You have access to a curated database of 21 historical GBM trials with full design and outcome data.
+const SYSTEM_PROMPT = `You are a senior clinical research analyst conducting pre-mortem analysis on proposed Phase 3 glioblastoma trials. You have access to a curated database of 21 historical GBM trials.
 
 Your job: read the user's proposed trial design, compare it against the database, and identify which historical failures it most resembles and which failure patterns it is most likely to repeat.
 
-GROUNDING RULES — these are non-negotiable:
+GROUNDING RULES:
 - Every claim about a past trial must be grounded in the database fields you are given. Do not invent trial names, drug effects, p-values, or hazard ratios.
-- When the database is thin for a given comparison (e.g., only one prior trial of a mechanism), explicitly say so rather than overclaiming.
-- Quote specific numbers from the database when relevant (HRs, p-values, median OS) — they are the strongest evidence.
+- When the database is thin (e.g., only one prior trial of a mechanism), say so rather than overclaiming.
+- Quote specific numbers from the database when relevant (HRs, p-values, median OS).
 - Use the PATTERN_LIBRARY names verbatim. Do not invent new pattern names when an existing one fits.
-- If the user's design is genuinely novel (no good comparators in the database), say so directly.
-- Distinguish "high risk because the database has many similar failures" from "uncertain because the database is small."
+- If the user's design is genuinely novel, say so directly.
 
 TONE:
 - Direct, clinical, evidence-anchored. Like a senior MSL or clinical pharmacology reviewer.
-- No hedging filler ("it might possibly be the case that…"). State the evidence and the conclusion.
-- No emojis. No marketing language. No promises about success — only flags about specific risks.
+- No hedging filler. State the evidence and the conclusion.
+- No emojis. No marketing language.
 
-OUTPUT FORMAT:
-You MUST return a single valid JSON object with exactly this shape. No prose before or after. No markdown code fences.
+CRITICAL OUTPUT FORMAT:
+Your entire response must be a single valid JSON object — nothing else. No explanation before. No explanation after. No markdown code fences. No commentary. The first character of your response must be { and the last character must be }.
+
+The JSON object must have exactly this shape:
 
 {
-  "risk_rating": "HIGH" | "MEDIUM" | "LOW",
-  "verdict_summary": "One sentence (max 30 words). The headline conclusion.",
+  "risk_rating": "HIGH",
+  "verdict_summary": "One sentence, max 30 words.",
   "patterns_flagged": [
     {
       "name": "Pattern name from PATTERN_LIBRARY",
-      "severity": "HIGH" | "MEDIUM" | "LOW",
-      "evidence_strength": "e.g. '3 of 3 anti-angiogenic trials in DB' or '2 prior failures, narrow basis'",
-      "explanation": "2-4 sentences. What the pattern is, why it applies to this design, what specifically goes wrong. Reference specific trial names and numbers from the DB."
+      "severity": "HIGH",
+      "evidence_strength": "e.g. 3 of 3 anti-angiogenic trials in DB",
+      "explanation": "2-4 sentences referencing specific trial names and numbers."
     }
   ],
   "similar_trials": [
     {
-      "name": "Trial name as it appears in the DB",
-      "year": "Year readout (string)",
-      "outcome": "FAILED" | "SUCCEEDED" | "MIXED",
-      "outcome_stats": "Compact stats line, e.g. 'mOS 26.3 vs 26.3 mo · HR 1.02 · p=0.86'",
-      "match_reasoning": "2-3 sentences. Why this trial is the most relevant comparator. Be specific — what features match (mechanism, setting, biomarker, endpoint, Phase 2 evidence quality)."
+      "name": "Trial name from DB",
+      "year": "2014",
+      "outcome": "FAILED",
+      "outcome_stats": "mOS 26.3 vs 26.3 mo · HR 1.02 · p=0.86",
+      "match_reasoning": "2-3 sentences explaining why this trial is the most relevant comparator."
     }
   ],
   "recommendations": [
-    "Concrete, actionable recommendation. 1-2 sentences each. 3-5 total."
+    "Concrete recommendation, 1-2 sentences."
   ]
 }
+
+Field constraints:
+- risk_rating: must be exactly "HIGH" or "MEDIUM" or "LOW" (uppercase string)
+- severity: must be exactly "HIGH" or "MEDIUM" or "LOW"
+- outcome: must be exactly "FAILED" or "SUCCEEDED" or "MIXED"
+- patterns_flagged: 1 to 4 items
+- similar_trials: exactly 3 items
+- recommendations: 3 to 5 items
 
 CALIBRATION:
 - HIGH risk: design matches 2+ failure patterns OR has a single pattern with strong evidence (3+ similar prior failures).
 - MEDIUM risk: 1 pattern flagged, or thin database evidence in a concerning direction.
-- LOW risk: design avoids known failure patterns; resembles successful trials more than failed ones.
+- LOW risk: design avoids known failure patterns; resembles successful trials more.
 
-Return up to 4 patterns_flagged (only include real ones), exactly 3 similar_trials, and 3-5 recommendations.`;
+REMEMBER: Return ONLY the JSON object. Start with { and end with }. Nothing else.`;
+
+// Robust extraction of a JSON object from a model response that may include
+// preamble, markdown fences, or trailing commentary.
+function extractJson(text) {
+  if (!text) return null;
+
+  // Strip markdown code fences
+  let cleaned = text.trim();
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+
+  // Try direct parse first
+  try { return JSON.parse(cleaned); } catch (_) {}
+
+  // Fall back to extracting the largest balanced {...} block
+  const start = cleaned.indexOf("{");
+  if (start === -1) return null;
+
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  for (let i = start; i < cleaned.length; i++) {
+    const ch = cleaned[i];
+    if (escape) { escape = false; continue; }
+    if (ch === "\\") { escape = true; continue; }
+    if (ch === '"') { inString = !inString; continue; }
+    if (inString) continue;
+    if (ch === "{") depth++;
+    else if (ch === "}") {
+      depth--;
+      if (depth === 0) {
+        const candidate = cleaned.slice(start, i + 1);
+        try { return JSON.parse(candidate); } catch (_) { return null; }
+      }
+    }
+  }
+  return null;
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -166,28 +207,28 @@ ${JSON.stringify(trials, null, 2)}
 
 ${PATTERN_LIBRARY}
 
-Now produce the JSON pre-mortem analysis as specified in your instructions.`;
+Now produce the JSON pre-mortem analysis. Return ONLY the JSON object — start with { and end with }. No other text.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 2500,
       system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: userMessage }],
+      messages: [
+        { role: "user", content: userMessage },
+        { role: "assistant", content: "{" },
+      ],
     });
 
-    const text = message.content
+    let text = message.content
       .filter((b) => b.type === "text")
       .map((b) => b.text)
       .join("");
 
-    let parsed;
-    try {
-      const cleaned = text
-        .replace(/^```(?:json)?\s*/i, "")
-        .replace(/```\s*$/i, "")
-        .trim();
-      parsed = JSON.parse(cleaned);
-    } catch (parseErr) {
+    // Because we prefilled the assistant turn with "{", prepend it to the response
+    text = "{" + text;
+
+    const parsed = extractJson(text);
+    if (!parsed) {
       console.error("JSON parse failed. Raw text:", text);
       return res.status(502).json({
         error: "The model returned a response that could not be parsed. Try again.",
