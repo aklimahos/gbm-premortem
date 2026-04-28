@@ -1,0 +1,13 @@
+{
+  "name": "gbm-trial-premortem",
+  "version": "1.0.0",
+  "description": "AI-powered pre-mortem analysis tool for proposed Phase 3 glioblastoma trials, grounded in a curated database of 21 historical trials.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0"
+  }
+}

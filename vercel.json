@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/api/analyze", "destination": "/api/analyze" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ],
+  "functions": {
+    "api/analyze.js": {
+      "maxDuration": 60
+    }
+  }
+}
