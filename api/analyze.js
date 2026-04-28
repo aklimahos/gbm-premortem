@@ -185,12 +185,11 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
-    // New payload shape: free-text description + 3 structured fields.
-    // Also accept legacy shape (drug/mechanism/...) for backward compatibility.
+    // Payload: free-text description + 7 structured fields.
+    // Also accept legacy shape (drug/mechanism/phase2/context) for back-compat.
     const description = body.description || [
       body.drug && `Drug: ${body.drug}`,
       body.mechanism && `Mechanism: ${body.mechanism}`,
-      body.endpoint && `Primary endpoint: ${body.endpoint}`,
       body.phase2 && `Phase 2 evidence: ${body.phase2}`,
       body.context && `Other context: ${body.context}`,
     ].filter(Boolean).join("\n");
@@ -198,6 +197,11 @@ export default async function handler(req, res) {
     const target_class = body.target_class;
     const setting = body.setting;
     const biomarker = body.biomarker;
+    // New optional structured fields (fallback to legacy `endpoint` for compat)
+    const sample_size = body.sample_size || "not specified";
+    const endpoint = body.endpoint || "not specified";
+    const comparator = body.comparator || "not specified";
+    const evidence_strength = body.evidence_strength || "not specified";
 
     if (!description || !target_class || !setting || !biomarker) {
       return res.status(400).json({ error: "Missing required fields." });
@@ -205,11 +209,15 @@ export default async function handler(req, res) {
 
     const userMessage = `PROPOSED TRIAL DESIGN
 ======================
-Target class: ${target_class}
-Setting: ${setting}
-Biomarker enrichment: ${biomarker}
+Target class:           ${target_class}
+Setting:                ${setting}
+Biomarker enrichment:   ${biomarker}
+Sample size:            ${sample_size}
+Primary endpoint:       ${endpoint}
+Comparator arm:         ${comparator}
+Prior evidence:         ${evidence_strength}
 
-Description (free text — parse out drug, dose, mechanism, sample size, primary endpoint, Phase 2 evidence, comparator, etc.):
+Description (free text — parse out any other relevant details: drug, dose, mechanism, mechanism rationale, etc.):
 ${description}
 
 DATABASE - 31 GBM TRIALS

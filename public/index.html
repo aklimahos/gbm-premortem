@@ -648,7 +648,7 @@
   <section class="panel">
     <div class="panel-header">
       <p class="panel-title">Your trial idea</p>
-      <span class="panel-step">4 questions</span>
+      <span class="panel-step">8 questions</span>
     </div>
     <div class="panel-body">
       <form id="trial-form">
@@ -684,13 +684,62 @@
           </div>
         </div>
 
+        <div class="field-row">
+          <div class="field">
+            <label for="biomarker">Are you only including a specific group of patients?</label>
+            <select id="biomarker" name="biomarker" required>
+              <option value="">Select…</option>
+              <option value="none (all-comers)">No — anyone with the disease</option>
+              <option value="biomarker-enriched (specific tumor mutation)">Yes — only patients with a specific tumor mutation</option>
+              <option value="patient-subgroup-enriched">Yes — only a specific patient subgroup</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sample_size">Roughly how many patients?</label>
+            <select id="sample_size" name="sample_size" required>
+              <option value="">Select…</option>
+              <option value="small (under 50)">Small — under 50 patients</option>
+              <option value="medium (50-200)">Medium — 50 to 200 patients</option>
+              <option value="large (200-1000)">Large — 200 to 1,000 patients</option>
+              <option value="very large (1000+)">Very large — over 1,000 patients</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="endpoint">What's the main outcome you're measuring?</label>
+            <select id="endpoint" name="endpoint" required>
+              <option value="">Select…</option>
+              <option value="OS (overall survival)">Patients living longer (overall survival)</option>
+              <option value="PFS (progression-free survival)">Cancer takes longer to come back (progression-free survival)</option>
+              <option value="ORR (response rate)">Tumor shrinks (response rate)</option>
+              <option value="safety / MTD">Safety and side effects only</option>
+              <option value="co-primary OS and PFS">Both living longer AND tumor control (co-primary)</option>
+              <option value="other endpoint">Something else</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="comparator">What are you comparing the treatment against?</label>
+            <select id="comparator" name="comparator" required>
+              <option value="">Select…</option>
+              <option value="placebo or no treatment">A placebo or no treatment</option>
+              <option value="standard of care">The current standard treatment</option>
+              <option value="active comparator drug">Another active drug</option>
+              <option value="single-arm (no comparator)">No comparison group (everyone gets the new treatment)</option>
+            </select>
+          </div>
+        </div>
+
         <div class="field">
-          <label for="biomarker">Are you only including a specific group of patients?</label>
-          <select id="biomarker" name="biomarker" required>
+          <label for="evidence_strength">How strong is the earlier evidence it might work?</label>
+          <p class="hint">What do you have so far — preclinical data, small studies, larger trials? The stronger the prior evidence, the lower the risk that the trial fails for surprise reasons.</p>
+          <select id="evidence_strength" name="evidence_strength" required>
             <option value="">Select…</option>
-            <option value="none (all-comers)">No — anyone with the disease</option>
-            <option value="biomarker-enriched (specific tumor mutation)">Yes — only patients with a specific tumor mutation</option>
-            <option value="patient-subgroup-enriched">Yes — only a specific patient subgroup</option>
+            <option value="strong (randomized prior data)">Strong — earlier randomized studies in humans showed clear benefit</option>
+            <option value="moderate (small human studies)">Moderate — earlier small studies suggested it might work</option>
+            <option value="weak (preclinical only)">Weak — only lab or animal evidence so far</option>
+            <option value="very weak (hypothesis only)">Very weak — mostly a hypothesis, no real data yet</option>
           </select>
         </div>
 
