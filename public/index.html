@@ -271,15 +271,8 @@
     margin-bottom: 20px;
   }
   .field-row .field { margin-bottom: 0; }
-  /* Align dropdowns at the same y-position even when labels wrap differently */
-  .field-row .field label {
-    min-height: 2.6em;
-    display: flex;
-    align-items: flex-end;
-  }
   @media (max-width: 560px) {
     .field-row { grid-template-columns: 1fr; }
-    .field-row .field label { min-height: auto; }
   }
 
   /* Submit */
@@ -693,7 +686,7 @@
 
         <div class="field-row">
           <div class="field">
-            <label for="biomarker">Are you only including a specific group of patients?</label>
+            <label for="biomarker">Including only a specific subgroup?</label>
             <select id="biomarker" name="biomarker" required>
               <option value="">Select…</option>
               <option value="none (all-comers)">No — anyone with the disease</option>
