@@ -1091,7 +1091,6 @@ function renderTrialCards(trials, container) {
 
   container.innerHTML = '';
   trials.forEach(t => {
-    const outcome = inferOutcome(t);
     const stats = buildStatsLine(t);
     const summary = buildSummary(t);
     const link = getPaperLink(t);
@@ -1105,7 +1104,6 @@ function renderTrialCards(trials, container) {
         <div class="trial-card-title">
           ${escapeHtml(t.name)}<span class="trial-card-year">· ${yearStr}</span>
         </div>
-        <span class="trial-card-badge ${outcome.toLowerCase()}">${outcome}</span>
       </div>
       <p class="trial-card-meta">${escapeHtml(t.target_class || '—')} · ${escapeHtml(t.setting || '—')} · n=${nStr}</p>
       ${stats ? `<p class="trial-card-stats">${escapeHtml(stats)}</p>` : ''}
