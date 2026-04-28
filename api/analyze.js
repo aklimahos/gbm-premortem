@@ -197,12 +197,10 @@ export default async function handler(req, res) {
     const target_class = body.target_class;
     const setting = body.setting;
     const biomarker = body.biomarker;
-    // New optional structured fields (fallback to legacy `endpoint` for compat)
+    // Optional structured fields (fallback if not provided)
     const sample_size = body.sample_size || "not specified";
     const endpoint = body.endpoint || "not specified";
     const comparator = body.comparator || "not specified";
-    const evidence_strength = body.evidence_strength || "not specified";
-    const blinding = body.blinding || "not specified";
 
     if (!description || !target_class || !setting || !biomarker) {
       return res.status(400).json({ error: "Missing required fields." });
@@ -216,8 +214,6 @@ Biomarker enrichment:   ${biomarker}
 Sample size:            ${sample_size}
 Primary endpoint:       ${endpoint}
 Comparator arm:         ${comparator}
-Prior evidence:         ${evidence_strength}
-Blinding:               ${blinding}
 
 Description (free text — parse out any other relevant details: drug, dose, mechanism, mechanism rationale, etc.):
 ${description}
