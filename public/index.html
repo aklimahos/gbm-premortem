@@ -333,8 +333,39 @@
     font-size: 14.5px;
     line-height: 1.55;
     color: var(--ink-soft);
-    margin: 0;
-    max-width: 580px;
+    margin: 0 0 18px;
+    max-width: 600px;
+  }
+  .validation-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  @media (max-width: 560px) {
+    .validation-stats { grid-template-columns: 1fr; }
+  }
+  .validation-stat {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .validation-stat-num {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+  .validation-stat-label {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.3;
   }
   .validation-grid {
     display: grid;
@@ -1412,79 +1443,6 @@
     </div>
   </section>
 
-  <section class="validation">
-    <div class="validation-header">
-      <p class="validation-eyebrow">Retrospective validation</p>
-      <h2 class="validation-heading">What if we had this tool in 2013?</h2>
-      <p class="validation-sub">Three real Phase 3 glioblastoma trials, run through the same pattern matcher. Each was flagged HIGH risk for the exact failure mode that ultimately killed it.</p>
-    </div>
-
-    <div class="validation-grid">
-      <article class="validation-card">
-        <div class="validation-match">Match</div>
-        <div class="validation-card-head">
-          <span class="validation-card-title">CENTRIC</span>
-          <span class="validation-card-year">2013</span>
-        </div>
-        <p class="validation-card-design">Cilengitide added to standard care, n=545, MGMT-methylated newly-diagnosed GBM, OS endpoint.</p>
-        <div class="validation-compare">
-          <div>
-            <p class="validation-col-label">Tool verdict</p>
-            <p class="validation-col-verdict">HIGH</p>
-            <p class="validation-col-pattern">Phase 2 → Phase 3 effect-size collapse</p>
-          </div>
-          <div>
-            <p class="validation-col-label">Actual outcome</p>
-            <p class="validation-col-outcome">FAILED</p>
-            <p class="validation-col-stats">mOS 26.3 vs 26.3 mo<br>HR 1.02 · p=0.86</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="validation-card">
-        <div class="validation-match">Match</div>
-        <div class="validation-card-head">
-          <span class="validation-card-title">AVAglio</span>
-          <span class="validation-card-year">2013</span>
-        </div>
-        <p class="validation-card-design">Bevacizumab + standard chemo and radiation, n=921, all-comers newly-diagnosed GBM, co-primary OS and PFS.</p>
-        <div class="validation-compare">
-          <div>
-            <p class="validation-col-label">Tool verdict</p>
-            <p class="validation-col-verdict">HIGH</p>
-            <p class="validation-col-pattern">Pseudoresponse (anti-angiogenic class)</p>
-          </div>
-          <div>
-            <p class="validation-col-label">Actual outcome</p>
-            <p class="validation-col-outcome">FAILED</p>
-            <p class="validation-col-stats">PFS met, OS missed<br>HR 0.88 · p=0.10</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="validation-card">
-        <div class="validation-match">Match</div>
-        <div class="validation-card-head">
-          <span class="validation-card-title">CheckMate-498</span>
-          <span class="validation-card-year">2019</span>
-        </div>
-        <p class="validation-card-design">Nivolumab vs temozolomide, n=560, MGMT-unmethylated newly-diagnosed GBM, OS endpoint.</p>
-        <div class="validation-compare">
-          <div>
-            <p class="validation-col-label">Tool verdict</p>
-            <p class="validation-col-verdict">HIGH</p>
-            <p class="validation-col-pattern">Cold-tumor immune therapy failure</p>
-          </div>
-          <div>
-            <p class="validation-col-label">Actual outcome</p>
-            <p class="validation-col-outcome">FAILED</p>
-            <p class="validation-col-stats">mOS 13.4 vs 14.9 mo<br>HR 1.31 · p=0.0037</p>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
   <section class="examples">
     <p class="examples-label">First time? Try one of these</p>
     <div class="examples-buttons">
@@ -1655,6 +1613,84 @@
       A research aid surfacing patterns from 31 historical glioblastoma trials. Not a regulatory or statistical predictor. A structured second opinion, not a verdict.
     </div>
 
+  </section>
+
+  <section class="validation">
+    <div class="validation-header">
+      <p class="validation-eyebrow">Retrospective validation</p>
+      <h2 class="validation-heading">What if we had this tool in 2013?</h2>
+      <p class="validation-sub">2,026 patients were enrolled across these three Phase 3 trials over twelve cumulative years. All three were flagged HIGH risk by the same pattern matcher, for the exact failure mode that ultimately killed each trial.</p>
+    <div class="validation-stats">
+      <div class="validation-stat"><span class="validation-stat-num">2,026</span><span class="validation-stat-label">Patients enrolled</span></div>
+      <div class="validation-stat"><span class="validation-stat-num">12 yrs</span><span class="validation-stat-label">Cumulative trial duration</span></div>
+      <div class="validation-stat"><span class="validation-stat-num">3 / 3</span><span class="validation-stat-label">Flagged HIGH in advance</span></div>
+    </div>
+    </div>
+
+    <div class="validation-grid">
+      <article class="validation-card">
+        <div class="validation-match">Match</div>
+        <div class="validation-card-head">
+          <span class="validation-card-title">CENTRIC</span>
+          <span class="validation-card-year">2013</span>
+        </div>
+        <p class="validation-card-design">Cilengitide added to standard care, n=545, MGMT-methylated newly-diagnosed GBM, OS endpoint.</p>
+        <div class="validation-compare">
+          <div>
+            <p class="validation-col-label">Tool verdict</p>
+            <p class="validation-col-verdict">HIGH</p>
+            <p class="validation-col-pattern">Phase 2 → Phase 3 effect-size collapse</p>
+          </div>
+          <div>
+            <p class="validation-col-label">Actual outcome</p>
+            <p class="validation-col-outcome">FAILED</p>
+            <p class="validation-col-stats">mOS 26.3 vs 26.3 mo<br>HR 1.02 · p=0.86</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="validation-card">
+        <div class="validation-match">Match</div>
+        <div class="validation-card-head">
+          <span class="validation-card-title">AVAglio</span>
+          <span class="validation-card-year">2013</span>
+        </div>
+        <p class="validation-card-design">Bevacizumab + standard chemo and radiation, n=921, all-comers newly-diagnosed GBM, co-primary OS and PFS.</p>
+        <div class="validation-compare">
+          <div>
+            <p class="validation-col-label">Tool verdict</p>
+            <p class="validation-col-verdict">HIGH</p>
+            <p class="validation-col-pattern">Pseudoresponse (anti-angiogenic class)</p>
+          </div>
+          <div>
+            <p class="validation-col-label">Actual outcome</p>
+            <p class="validation-col-outcome">FAILED</p>
+            <p class="validation-col-stats">PFS met, OS missed<br>HR 0.88 · p=0.10</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="validation-card">
+        <div class="validation-match">Match</div>
+        <div class="validation-card-head">
+          <span class="validation-card-title">CheckMate-498</span>
+          <span class="validation-card-year">2019</span>
+        </div>
+        <p class="validation-card-design">Nivolumab vs temozolomide, n=560, MGMT-unmethylated newly-diagnosed GBM, OS endpoint.</p>
+        <div class="validation-compare">
+          <div>
+            <p class="validation-col-label">Tool verdict</p>
+            <p class="validation-col-verdict">HIGH</p>
+            <p class="validation-col-pattern">Cold-tumor immune therapy failure</p>
+          </div>
+          <div>
+            <p class="validation-col-label">Actual outcome</p>
+            <p class="validation-col-outcome">FAILED</p>
+            <p class="validation-col-stats">mOS 13.4 vs 14.9 mo<br>HR 1.31 · p=0.0037</p>
+          </div>
+        </div>
+      </article>
+    </div>
   </section>
 
   <section class="database-section" id="database">
