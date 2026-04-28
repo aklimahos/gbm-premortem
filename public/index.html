@@ -200,6 +200,75 @@
     font-style: normal;
   }
 
+  /* Why this cancer section */
+  .why-section {
+    margin: 0 0 36px;
+    padding: 26px 28px;
+    background: linear-gradient(135deg, #FBEAE7 0%, #F7E0DC 100%);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(184, 106, 106, 0.06);
+  }
+  .why-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .why-heading {
+    font-family: var(--serif);
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 500;
+    margin: 0 0 18px;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    max-width: 600px;
+  }
+  .why-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 0 0 18px;
+  }
+  @media (max-width: 560px) {
+    .why-stats { grid-template-columns: 1fr; }
+  }
+  .why-stat {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(184, 106, 106, 0.15);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .why-stat-number {
+    display: block;
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .why-stat-label {
+    display: block;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .why-text {
+    margin: 0 0 10px;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+  .why-text:last-child {
+    margin-bottom: 0;
+  }
+
   /* Try-an-example buttons */
   .examples {
     margin: 0 0 24px;
@@ -975,6 +1044,27 @@
       <span class="label">Example</span>
       "A drug that blocks tumor blood vessels, given to all patients. 3 of 3 trials with this profile failed in the database."
     </div>
+  </section>
+
+  <section class="why-section">
+    <p class="why-eyebrow">Why this cancer</p>
+    <h2 class="why-heading">Glioblastoma is the deadliest brain cancer, and treatment hasn't fundamentally changed in 20 years.</h2>
+    <div class="why-stats">
+      <div class="why-stat">
+        <span class="why-stat-number">~15 mo</span>
+        <span class="why-stat-label">Median survival from diagnosis</span>
+      </div>
+      <div class="why-stat">
+        <span class="why-stat-number">&lt;5%</span>
+        <span class="why-stat-label">Patients alive at 5 years</span>
+      </div>
+      <div class="why-stat">
+        <span class="why-stat-number">2005</span>
+        <span class="why-stat-label">Last fundamental treatment update</span>
+      </div>
+    </div>
+    <p class="why-text">About 13,000 Americans are diagnosed each year. Senator John McCain, Beau Biden, and Senator Ted Kennedy all died of it. Despite hundreds of clinical trials and billions of dollars, the standard treatment — surgery, radiation, and temozolomide — hasn't fundamentally improved since the Stupp protocol in 2005.</p>
+    <p class="why-text">The field keeps running large, expensive trials that repeat the same mistakes. Catching design flaws before a $500M trial commits is one small way to push toward designs that actually have a chance of working.</p>
   </section>
 
   <section class="examples">
