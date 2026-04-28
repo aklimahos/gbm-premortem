@@ -200,6 +200,51 @@
     font-style: normal;
   }
 
+  /* Try-an-example buttons */
+  .examples {
+    margin: 0 0 24px;
+  }
+  .examples-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .examples-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .example-btn {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .example-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--accent-soft);
+  }
+  .example-btn:active { transform: translateY(1px); }
+  .example-btn.filled {
+    background: var(--accent-soft);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .example-btn.filled::before {
+    content: "✓ ";
+  }
+
   /* Form panel */
   .panel {
     background: var(--surface);
@@ -914,6 +959,15 @@
     </div>
   </section>
 
+  <section class="examples">
+    <p class="examples-label">First time? Try one of these</p>
+    <div class="examples-buttons">
+      <button type="button" class="example-btn" data-example="avaglio">Anti-VEGF in newly diagnosed GBM</button>
+      <button type="button" class="example-btn" data-example="checkmate">Checkpoint inhibitor in GBM</button>
+      <button type="button" class="example-btn" data-example="braf">BRAF-targeted in BRAF-mutant GBM</button>
+    </div>
+  </section>
+
   <section class="panel">
     <div class="panel-header">
       <p class="panel-title">Your trial idea</p>
@@ -1314,6 +1368,73 @@ function buildSummary(t) {
 }
 
 document.addEventListener('DOMContentLoaded', loadTrialDatabase);
+
+// ----- Try-an-example button auto-fill -----
+
+const EXAMPLES = {
+  avaglio: {
+    label: 'Anti-VEGF in newly diagnosed GBM',
+    fields: {
+      target_class: 'anti-angiogenic',
+      setting: 'newly diagnosed',
+      biomarker: 'none (all-comers)',
+      sample_size: 'large (200-1000)',
+      endpoint: 'co-primary OS and PFS',
+      comparator: 'standard of care',
+      combination: 'combo with standard chemo and radiation',
+      delivery: 'partial blood-brain barrier penetration'
+    }
+  },
+  checkmate: {
+    label: 'Checkpoint inhibitor in GBM',
+    fields: {
+      target_class: 'immune checkpoint inhibitor (PD-1)',
+      setting: 'newly diagnosed',
+      biomarker: 'none (all-comers)',
+      sample_size: 'large (200-1000)',
+      endpoint: 'OS (overall survival)',
+      comparator: 'standard of care',
+      combination: 'combo with standard chemo and radiation',
+      delivery: 'partial blood-brain barrier penetration'
+    }
+  },
+  braf: {
+    label: 'BRAF-targeted in BRAF-mutant GBM',
+    fields: {
+      target_class: 'kinase inhibitor',
+      setting: 'recurrent',
+      biomarker: 'biomarker-enriched (specific tumor mutation)',
+      sample_size: 'small (under 50)',
+      endpoint: 'ORR (response rate)',
+      comparator: 'single-arm (no comparator)',
+      combination: 'monotherapy',
+      delivery: 'crosses blood-brain barrier (CNS-penetrant)'
+    }
+  }
+};
+
+function fillExample(key) {
+  const example = EXAMPLES[key];
+  if (!example) return;
+  Object.entries(example.fields).forEach(([fieldName, value]) => {
+    const select = document.getElementById(fieldName);
+    if (select) {
+      select.value = value;
+      // Trigger change event so any listeners pick it up
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+  // Visual feedback: mark active button, clear others
+  document.querySelectorAll('.example-btn').forEach(btn => {
+    btn.classList.toggle('filled', btn.dataset.example === key);
+  });
+  // Smooth scroll the form into view
+  document.querySelector('.panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.querySelectorAll('.example-btn').forEach(btn => {
+  btn.addEventListener('click', () => fillExample(btn.dataset.example));
+});
 </script>
 
 </body>
