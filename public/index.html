@@ -103,17 +103,18 @@
     margin-bottom: 36px;
     display: flex;
     align-items: center;
-    gap: 36px;
+    gap: 22px;
   }
   .hero-text {
-    flex: 1;
+    flex: 0 1 auto;
     min-width: 0;
+    max-width: 540px;
   }
   .hero-icon {
     flex-shrink: 0;
-    width: 130px;
-    height: 130px;
-    filter: drop-shadow(0 6px 18px rgba(184, 106, 106, 0.18));
+    width: 175px;
+    height: 175px;
+    filter: drop-shadow(0 10px 26px rgba(155, 70, 70, 0.22)) drop-shadow(0 2px 6px rgba(155, 70, 70, 0.12));
   }
   .hero-icon svg {
     width: 100%;
@@ -126,7 +127,8 @@
       align-items: flex-start;
       gap: 18px;
     }
-    .hero-icon { width: 88px; height: 88px; }
+    .hero-text { max-width: none; }
+    .hero-icon { width: 110px; height: 110px; }
   }
   .eyebrow {
     font-size: 12px;
@@ -806,70 +808,98 @@
       <p class="lede">Match your idea against 31 historical brain cancer trials and see which past failures it most resembles.</p>
     </div>
     <div class="hero-icon" aria-hidden="true">
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#F8E6E3"/>
-            <stop offset="55%" stop-color="#E8B6B6"/>
-            <stop offset="100%" stop-color="#C88282"/>
-          </linearGradient>
-          <radialGradient id="brainHilite" cx="35%" cy="30%" r="40%">
-            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
+          <radialGradient id="brainSurface" cx="32%" cy="22%" r="80%">
+            <stop offset="0%" stop-color="#FCEDE9"/>
+            <stop offset="30%" stop-color="#F0BFB9"/>
+            <stop offset="65%" stop-color="#D38484"/>
+            <stop offset="100%" stop-color="#9C4848"/>
+          </radialGradient>
+          <radialGradient id="brainBloom" cx="30%" cy="18%" r="22%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+            <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.25"/>
             <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
           </radialGradient>
+          <radialGradient id="brainShade" cx="78%" cy="82%" r="40%">
+            <stop offset="0%" stop-color="#5C2424" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#5C2424" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="bgGlow" cx="50%" cy="42%" r="65%">
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="70%" stop-color="#FCF7F2"/>
+            <stop offset="100%" stop-color="#EAD8CA"/>
+          </radialGradient>
+          <filter id="brainDropShadow" x="-30%" y="-15%" width="160%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="1" dy="5"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+            <feMerge>
+              <feMergeNode/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
         </defs>
 
-        <!-- soft circle backdrop -->
-        <circle cx="60" cy="60" r="55" fill="#FCF7F2"/>
+        <!-- backdrop with depth -->
+        <circle cx="70" cy="70" r="64" fill="url(#bgGlow)"/>
+        <circle cx="70" cy="70" r="64" fill="none" stroke="#EBDFD3" stroke-width="1"/>
 
-        <!-- brain shape: two soft lobes -->
-        <g transform="translate(60 62)">
-          <path d="M 0 -36
-                   C -10 -38, -22 -34, -26 -24
-                   C -36 -24, -42 -14, -38 -4
-                   C -42 4, -38 12, -32 14
-                   C -32 22, -26 28, -18 26
-                   C -14 32, -4 34, 0 30
-                   C 4 34, 14 32, 18 26
-                   C 26 28, 32 22, 32 14
-                   C 38 12, 42 4, 38 -4
-                   C 42 -14, 36 -24, 26 -24
-                   C 22 -34, 10 -38, 0 -36 Z"
-                fill="url(#brainGrad)"
-                stroke="#B86A6A"
-                stroke-width="2"
+        <!-- brain body, with shadow filter -->
+        <g transform="translate(70 72)" filter="url(#brainDropShadow)">
+          <!-- main lobed shape -->
+          <path id="brain-shape" d="M 0 -40
+                   C -12 -42, -25 -38, -29 -28
+                   C -40 -28, -47 -16, -43 -6
+                   C -47 4, -43 14, -36 16
+                   C -36 25, -28 32, -20 30
+                   C -15 36, -4 38, 0 34
+                   C 4 38, 15 36, 20 30
+                   C 28 32, 36 25, 36 16
+                   C 43 14, 47 4, 43 -6
+                   C 47 -16, 40 -28, 29 -28
+                   C 25 -38, 12 -42, 0 -40 Z"
+                fill="url(#brainSurface)"
+                stroke="#7A3838"
+                stroke-width="2.2"
                 stroke-linejoin="round"/>
 
-          <!-- highlight overlay for soft 3D feel -->
-          <path d="M 0 -36
-                   C -10 -38, -22 -34, -26 -24
-                   C -36 -24, -42 -14, -38 -4
-                   C -42 4, -38 12, -32 14
-                   C -32 22, -26 28, -18 26
-                   C -14 32, -4 34, 0 30
-                   C 4 34, 14 32, 18 26
-                   C 26 28, 32 22, 32 14
-                   C 38 12, 42 4, 38 -4
-                   C 42 -14, 36 -24, 26 -24
-                   C 22 -34, 10 -38, 0 -36 Z"
-                fill="url(#brainHilite)"/>
+          <!-- shadow side (bottom-right) -->
+          <use href="#brain-shape" fill="url(#brainShade)"/>
 
-          <!-- central sulcus -->
-          <path d="M 0 -34 C -2 -10, -2 10, 0 28"
-                stroke="#B86A6A"
-                stroke-width="1.6"
+          <!-- bloom highlight (top-left) -->
+          <use href="#brain-shape" fill="url(#brainBloom)"/>
+
+          <!-- central sulcus, deep -->
+          <path d="M 0 -38 C -2 -12, -2 12, 0 32"
+                stroke="#5C2424"
+                stroke-width="2"
                 fill="none"
-                stroke-linecap="round"/>
+                stroke-linecap="round"
+                opacity="0.55"/>
+          <path d="M 0 -38 C -2 -12, -2 12, 0 32"
+                stroke="#FFD8D2"
+                stroke-width="0.7"
+                fill="none"
+                stroke-linecap="round"
+                opacity="0.6"
+                transform="translate(-1 0)"/>
 
-          <!-- left hemisphere gyri -->
-          <path d="M -22 -16 Q -16 -19, -10 -14" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-          <path d="M -26 -2 Q -16 -4, -8 -1" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-          <path d="M -22 12 Q -14 9, -8 13" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <!-- left hemisphere gyri (sulcus shadow + highlight) -->
+          <path d="M -25 -18 Q -18 -21, -11 -15" stroke="#5C2424" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M -29 -3 Q -18 -5, -9 -1" stroke="#5C2424" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M -25 13 Q -16 10, -9 15" stroke="#5C2424" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <!-- gyri highlights (raised feel) -->
+          <path d="M -25 -20 Q -18 -23, -11 -17" stroke="#FFEBE6" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.7"/>
+          <path d="M -29 -5 Q -18 -7, -9 -3" stroke="#FFEBE6" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
 
           <!-- right hemisphere gyri -->
-          <path d="M 22 -16 Q 16 -19, 10 -14" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-          <path d="M 26 -2 Q 16 -4, 8 -1" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-          <path d="M 22 12 Q 14 9, 8 13" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M 25 -18 Q 18 -21, 11 -15" stroke="#5C2424" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M 29 -3 Q 18 -5, 9 -1" stroke="#5C2424" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M 25 13 Q 16 10, 9 15" stroke="#5C2424" stroke-width="1.7" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <!-- right gyri highlights -->
+          <path d="M 25 -20 Q 18 -23, 11 -17" stroke="#FFEBE6" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.55"/>
+          <path d="M 29 -5 Q 18 -7, 9 -3" stroke="#FFEBE6" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.45"/>
         </g>
       </svg>
     </div>
