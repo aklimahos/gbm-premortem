@@ -72,13 +72,26 @@
     background: var(--primary);
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
-  .nav-back {
+  .appbar-nav {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .appbar-nav a {
     font-size: 13px;
     color: var(--ink-soft);
     text-decoration: none;
     font-weight: 500;
+    letter-spacing: 0.005em;
+    transition: color 0.15s;
+    white-space: nowrap;
   }
-  .nav-back:hover { color: var(--primary); }
+  .appbar-nav a:hover { color: var(--primary); }
+  .appbar-nav a.active { color: var(--primary); }
+  @media (max-width: 520px) {
+    .appbar-nav { gap: 14px; }
+    .appbar-nav a { font-size: 12px; }
+  }
 
   .page {
     max-width: 720px;
@@ -230,7 +243,10 @@
       <span class="brand-dot"></span>
       glio.ai
     </a>
-    <a class="nav-back" href="/">← Back to tool</a>
+    <nav class="appbar-nav">
+      <a href="/about" class="active">Methodology</a>
+      <a href="/disclaimer">Disclaimer</a>
+    </nav>
   </div>
 </header>
 
