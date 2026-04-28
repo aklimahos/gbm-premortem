@@ -306,7 +306,7 @@
 
   /* Retrospective validation section */
   .validation {
-    margin: 0 0 36px;
+    margin: 56px 0 36px;
   }
   .validation-header {
     margin-bottom: 18px;
@@ -1288,6 +1288,76 @@
     font-size: 14px;
   }
 
+  /* Database CTA card */
+  .db-cta {
+    margin: 48px 0 0;
+  }
+  .db-cta-inner {
+    background: linear-gradient(135deg, #FCF7F2 0%, #F7E8E2 100%);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: 0 2px 12px rgba(184, 106, 106, 0.05);
+  }
+  .db-cta-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 6px;
+    font-weight: 600;
+  }
+  .db-cta-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: 500;
+    margin: 0 0 6px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .db-cta-text {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 480px;
+  }
+  .db-cta-button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+    box-shadow: 0 2px 8px rgba(184, 106, 106, 0.2);
+  }
+  .db-cta-button:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 4px 14px rgba(184, 106, 106, 0.28);
+  }
+  .db-cta-button .arrow {
+    margin-left: 6px;
+    display: inline-block;
+    transition: transform 0.15s;
+  }
+  .db-cta-button:hover .arrow { transform: translateX(2px); }
+  @media (max-width: 600px) {
+    .db-cta-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .db-cta-button { align-self: stretch; text-align: center; }
+  }
+
   /* Footer */
   footer {
     margin-top: 60px;
@@ -1327,6 +1397,7 @@
     </div>
     <nav class="appbar-nav">
       <span class="appbar-updated">Updated Apr 2026</span>
+      <a href="/database">Database</a>
       <a href="/about">Methodology</a>
       <a href="/disclaimer">Disclaimer</a>
     </nav>
@@ -1622,7 +1693,7 @@
       <p class="validation-sub">2,026 patients were enrolled across these three Phase 3 trials over twelve cumulative years. All three were flagged HIGH risk by the same pattern matcher, for the exact failure mode that ultimately killed each trial.</p>
     <div class="validation-stats">
       <div class="validation-stat"><span class="validation-stat-num">2,026</span><span class="validation-stat-label">Patients enrolled</span></div>
-      <div class="validation-stat"><span class="validation-stat-num">12 yrs</span><span class="validation-stat-label">Cumulative trial duration</span></div>
+      <div class="validation-stat"><span class="validation-stat-num">~$400M</span><span class="validation-stat-label">Estimated combined R&amp;D spend</span></div>
       <div class="validation-stat"><span class="validation-stat-num">3 / 3</span><span class="validation-stat-label">Flagged HIGH in advance</span></div>
     </div>
     </div>
@@ -1693,22 +1764,14 @@
     </div>
   </section>
 
-  <section class="database-section" id="database">
-    <div class="db-header">
-      <p class="db-eyebrow">The database</p>
-      <h2 class="db-heading">All 31 trials this tool checks against</h2>
-    </div>
-    <div class="db-filters" id="db-filters">
-      <button class="db-filter active" data-filter="all">All trials</button>
-      <button class="db-filter" data-filter="anti-angiogenic">Anti-angiogenic</button>
-      <button class="db-filter" data-filter="immune checkpoint">Immunotherapy</button>
-      <button class="db-filter" data-filter="vaccine">Vaccines / cell therapy</button>
-      <button class="db-filter" data-filter="kinase">Targeted</button>
-      <button class="db-filter" data-filter="alkylator">Chemotherapy</button>
-      <button class="db-filter" data-filter="device">Device</button>
-    </div>
-    <div id="trial-cards" class="db-grid">
-      <p class="db-loading">Loading trials…</p>
+  <section class="db-cta">
+    <div class="db-cta-inner">
+      <div>
+        <p class="db-cta-eyebrow">The database</p>
+        <h2 class="db-cta-title">Browse all 31 historical trials</h2>
+        <p class="db-cta-text">Each trial includes a plain-English deep-dive of why it succeeded or failed. Filter by treatment class, click any trial for the breakdown.</p>
+      </div>
+      <a class="db-cta-button" href="/database">Open the database<span class="arrow">→</span></a>
     </div>
   </section>
 

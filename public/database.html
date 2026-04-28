@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database · glio.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7EEE6;
+    --bg-soft: #FBF4ED;
+    --surface: #FFFFFF;
+    --surface-soft: #FDF8F3;
+    --ink: #2C211D;
+    --ink-soft: #5E4C44;
+    --ink-muted: #9A867B;
+    --rule: #EBDFD3;
+    --rule-soft: #F4EBE0;
+    --primary: #B86A6A;
+    --primary-hover: #A35454;
+    --accent: #D49797;
+    --accent-soft: #F8E6E3;
+    --high: #B8424B;
+    --high-bg: #F8DCDA;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse at top right, rgba(212, 151, 151, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(184, 106, 106, 0.05), transparent 50%);
+    background-attachment: fixed;
+  }
+
+  .appbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 1px 0 rgba(184, 106, 106, 0.04);
+  }
+  .appbar-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .brand-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .appbar-nav {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .appbar-updated {
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    padding-right: 8px;
+    border-right: 1px solid var(--rule);
+    margin-right: 4px;
+  }
+  .appbar-nav a {
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .appbar-nav a:hover { color: var(--primary); }
+  .appbar-nav a.active { color: var(--primary); }
+  @media (max-width: 640px) { .appbar-updated { display: none; } }
+  @media (max-width: 520px) {
+    .appbar-nav { gap: 14px; }
+    .appbar-nav a { font-size: 12px; }
+  }
+
+  .page {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 56px 28px 96px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 38px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+  .lede {
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 36px;
+    max-width: 680px;
+  }
+  .lede a { color: var(--primary); text-decoration: none; border-bottom: 1px solid rgba(184,106,106,0.3); }
+  .lede a:hover { color: var(--primary-hover); border-bottom-color: var(--primary); }
+
+  .db-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .db-filter {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .db-filter:hover { border-color: var(--primary); color: var(--primary); }
+  .db-filter.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .db-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 920px) { .db-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .db-grid { grid-template-columns: 1fr; } }
+
+  .db-loading {
+    color: var(--ink-muted);
+    font-size: 14px;
+    font-style: italic;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 48px 0;
+  }
+
+  .trial-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    cursor: pointer;
+  }
+  .trial-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px rgba(184, 106, 106, 0.10);
+    transform: translateY(-1px);
+  }
+  .trial-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .trial-card-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 15.5px;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    flex: 1;
+    min-width: 0;
+    line-height: 1.3;
+  }
+  .trial-card-year {
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .trial-card-meta {
+    margin: 0 0 8px;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+  .trial-card-stats {
+    margin: 0 0 8px;
+    padding: 6px 10px;
+    background: var(--bg-soft);
+    border-radius: 6px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .trial-card-summary {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .trial-card-link {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+  }
+  .trial-card-link:hover { color: var(--primary-hover); border-bottom-color: var(--primary); }
+  .trial-card-link .arrow { margin-left: 3px; transition: transform 0.15s; display: inline-block; }
+  .trial-card-link:hover .arrow { transform: translateX(2px); }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--rule);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(44, 33, 29, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.visible { opacity: 1; pointer-events: auto; }
+  .modal {
+    background: var(--surface);
+    border-radius: 16px;
+    max-width: 640px; width: 100%;
+    max-height: 88vh; overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 64px rgba(155, 70, 70, 0.32), 0 4px 12px rgba(155, 70, 70, 0.12);
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.22s ease-out;
+  }
+  .modal-overlay.visible .modal { transform: scale(1) translateY(0); }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    background: transparent; border: none;
+    font-size: 24px; line-height: 1; cursor: pointer;
+    color: var(--ink-muted);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;
+    transition: background 0.15s, color 0.15s;
+  }
+  .modal-close:hover { background: var(--bg-soft); color: var(--ink); }
+  .modal-content { padding: 36px 40px 32px; }
+  .modal-eyebrow {
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--primary); font-weight: 600; margin: 0 0 8px;
+  }
+  .modal-title {
+    font-family: var(--serif); font-size: 28px; line-height: 1.15;
+    font-weight: 500; margin: 0 0 4px; color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  .modal-year { font-size: 13px; color: var(--ink-muted); margin: 0 0 20px; letter-spacing: 0.04em; }
+  .modal-summary {
+    font-family: var(--serif); font-size: 19px; line-height: 1.4;
+    color: var(--ink); font-weight: 500;
+    margin: 0 0 28px; padding: 16px 18px;
+    background: var(--accent-soft); border-left: 3px solid var(--primary);
+    border-radius: 8px;
+  }
+  .modal-section { margin-bottom: 22px; }
+  .modal-section:last-child { margin-bottom: 0; }
+  .modal-section-label {
+    font-size: 10.5px; font-weight: 600; color: var(--primary);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    margin: 0 0 8px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .modal-section-text { margin: 0; font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
+  .modal-paper-link {
+    display: inline-block; margin-top: 24px;
+    font-size: 13px; color: var(--primary);
+    text-decoration: none; font-weight: 600; letter-spacing: 0.01em;
+    border-bottom: 1px solid transparent; padding-bottom: 1px;
+  }
+  .modal-paper-link:hover { color: var(--primary-hover); border-bottom-color: var(--primary); }
+  .modal-loading { padding: 64px 36px; text-align: center; color: var(--ink-muted); }
+  .modal-loading .spinner { margin: 0 auto 16px; }
+  .modal-error {
+    margin: 36px; padding: 14px 18px;
+    background: var(--high-bg); border: 1px solid #E8B8B5;
+    border-left: 3px solid var(--high); border-radius: 8px;
+    color: var(--high); font-size: 14px;
+  }
+
+  footer {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 28px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  footer .footer-links { margin-bottom: 8px; }
+  footer .footer-links a {
+    color: var(--ink-soft); text-decoration: none;
+    margin-right: 16px; font-weight: 500;
+  }
+  footer .footer-links a:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <a class="brand" href="/">
+      <span class="brand-dot"></span>
+      glio.ai
+    </a>
+    <nav class="appbar-nav">
+      <span class="appbar-updated">Updated Apr 2026</span>
+      <a href="/database" class="active">Database</a>
+      <a href="/about">Methodology</a>
+      <a href="/disclaimer">Disclaimer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+
+  <p class="eyebrow">The database</p>
+  <h1>All 31 trials this tool checks against.</h1>
+  <p class="lede">Every glioblastoma trial in the database, sorted by year. Filter by treatment class. Click any card to open a plain-English deep-dive of why the trial succeeded or failed. Curation methodology is on the <a href="/about">about page</a>.</p>
+
+  <div class="db-filters" id="db-filters">
+    <button class="db-filter active" data-filter="all">All trials</button>
+    <button class="db-filter" data-filter="anti-angiogenic">Anti-angiogenic</button>
+    <button class="db-filter" data-filter="immune checkpoint">Immunotherapy</button>
+    <button class="db-filter" data-filter="vaccine">Vaccines / cell therapy</button>
+    <button class="db-filter" data-filter="kinase">Targeted</button>
+    <button class="db-filter" data-filter="alkylator">Chemotherapy</button>
+    <button class="db-filter" data-filter="device">Device</button>
+  </div>
+
+  <div id="trial-cards" class="db-grid">
+    <p class="db-loading"><span class="spinner" style="display:inline-block;vertical-align:middle;margin-right:10px"></span>Loading trials…</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/disclaimer">Disclaimer</a>
+    <a href="mailto:aklimahos@gmail.com">aklimahos@gmail.com</a>
+  </div>
+  Independent project · Not affiliated with any pharmaceutical company or regulatory body
+</footer>
+
+<div class="modal-overlay" id="trial-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close-btn" aria-label="Close">×</button>
+    <div id="modal-content">
+      <div class="modal-loading"><div class="spinner"></div><p>Loading…</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let LOADED_TRIALS = [];
+
+async function loadTrialDatabase() {
+  const container = document.getElementById('trial-cards');
+  if (!container) return;
+  try {
+    const response = await fetch('/api/trials');
+    if (!response.ok) throw new Error('Server returned ' + response.status);
+    LOADED_TRIALS = await response.json();
+    renderTrialCards(LOADED_TRIALS, container);
+    wireFilterButtons();
+  } catch (err) {
+    container.innerHTML = '<p class="db-loading">Could not load the trial database. Try reloading the page.</p>';
+  }
+}
+
+function wireFilterButtons() {
+  const filterRow = document.getElementById('db-filters');
+  if (!filterRow) return;
+  filterRow.addEventListener('click', (e) => {
+    const btn = e.target.closest('.db-filter');
+    if (!btn) return;
+    filterRow.querySelectorAll('.db-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    const filtered = filter === 'all'
+      ? LOADED_TRIALS
+      : LOADED_TRIALS.filter(t => (t.target_class || '').toLowerCase().includes(filter.toLowerCase()));
+    const container = document.getElementById('trial-cards');
+    if (filtered.length === 0) {
+      container.innerHTML = '<p class="db-loading">No trials in this category.</p>';
+    } else {
+      renderTrialCards(filtered, container);
+    }
+  });
+}
+
+function renderTrialCards(trials, container) {
+  trials.sort((a, b) => {
+    const ay = a.year || 0; const by = b.year || 0;
+    if (by !== ay) return by - ay;
+    return (a.name || '').localeCompare(b.name || '');
+  });
+  container.innerHTML = '';
+  trials.forEach(t => {
+    const stats = buildStatsLine(t);
+    const summary = buildSummary(t);
+    const link = getPaperLink(t);
+    const card = document.createElement('article');
+    card.className = 'trial-card';
+    card.dataset.trialName = t.name;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `Open deep-dive analysis for ${t.name}`);
+    const yearStr = t.year ? Math.round(t.year) : '';
+    const nStr = t.n ? Math.round(t.n) : '?';
+    card.innerHTML = `
+      <div class="trial-card-head">
+        <div class="trial-card-title">${escapeHtml(t.name)}<span class="trial-card-year">· ${yearStr}</span></div>
+      </div>
+      <p class="trial-card-meta">${escapeHtml(t.target_class || '?')} · ${escapeHtml(t.setting || '?')} · n=${nStr}</p>
+      ${stats ? `<p class="trial-card-stats">${escapeHtml(stats)}</p>` : ''}
+      <p class="trial-card-summary">${escapeHtml(summary)}</p>
+      <a class="trial-card-link" href="${link.url}" target="_blank" rel="noopener noreferrer">${link.label}<span class="arrow">→</span></a>
+    `;
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.trial-card-link')) return;
+      openTrialModal(t.name, link);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openTrialModal(t.name, link);
+      }
+    });
+    container.appendChild(card);
+  });
+}
+
+function buildStatsLine(t) {
+  const parts = [];
+  if (t.mOS_int != null && t.mOS_ctrl != null) parts.push(`mOS ${t.mOS_int} vs ${t.mOS_ctrl} mo`);
+  else if (t.mOS_int != null) parts.push(`mOS ${t.mOS_int} mo`);
+  if (t.OS_HR != null) parts.push(`HR ${t.OS_HR}`);
+  if (t.OS_p != null) parts.push(`p=${t.OS_p}`);
+  return parts.join(' · ');
+}
+
+function buildSummary(t) {
+  const text = (t.sponsor_reason || t.hypothesis || '').trim();
+  if (!text) return '';
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  let summary = sentences.slice(0, 2).join(' ');
+  if (summary.length > 220) summary = summary.slice(0, 220).replace(/\s+\S*$/, '') + '…';
+  return summary;
+}
+
+function getPaperLink(t) {
+  const notes = (t.notes || '') + ' ' + (t.analysis || '');
+  const pmidMatch = notes.match(/PMID[:\s]+(\d{6,9})/i);
+  if (pmidMatch) return { url: `https://pubmed.ncbi.nlm.nih.gov/${pmidMatch[1]}/`, label: 'View paper' };
+  const cleanName = (t.name || '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  return { url: `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(cleanName + ' glioblastoma')}`, label: 'Search PubMed' };
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// Modal logic
+const trialModal = document.getElementById('trial-modal');
+const modalContent = document.getElementById('modal-content');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+
+async function openTrialModal(trialName, paperLink) {
+  trialModal.hidden = false;
+  void trialModal.offsetWidth;
+  trialModal.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  modalContent.innerHTML = `
+    <div class="modal-loading"><div class="spinner"></div>
+    <p>Loading deep-dive for <strong>${escapeHtml(trialName)}</strong>…</p></div>
+  `;
+  try {
+    const url = `/api/explain?trial=${encodeURIComponent(trialName)}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: 'Server error' }));
+      throw new Error(err.error || `Request failed (${response.status})`);
+    }
+    const data = await response.json();
+    renderTrialModalContent(data, paperLink);
+  } catch (err) {
+    modalContent.innerHTML = `<div class="modal-error">Could not load analysis: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderTrialModalContent(data, paperLink) {
+  const linkHtml = paperLink
+    ? `<a class="modal-paper-link" href="${paperLink.url}" target="_blank" rel="noopener noreferrer">${paperLink.label}<span style="margin-left:4px">→</span></a>`
+    : '';
+  modalContent.innerHTML = `
+    <div class="modal-content">
+      <p class="modal-eyebrow">Trial deep-dive</p>
+      <h2 class="modal-title" id="modal-title">${escapeHtml(data.name || '')}</h2>
+      <p class="modal-year">${data.year || ''}</p>
+      ${data.outcome_summary ? `<p class="modal-summary">${escapeHtml(data.outcome_summary)}</p>` : ''}
+      <div class="modal-section"><p class="modal-section-label">What they tried</p><p class="modal-section-text">${escapeHtml(data.what_they_tried || '')}</p></div>
+      <div class="modal-section"><p class="modal-section-label">What happened</p><p class="modal-section-text">${escapeHtml(data.what_happened || '')}</p></div>
+      <div class="modal-section"><p class="modal-section-label">Why</p><p class="modal-section-text">${escapeHtml(data.why || '')}</p></div>
+      <div class="modal-section"><p class="modal-section-label">What we learned</p><p class="modal-section-text">${escapeHtml(data.what_we_learned || '')}</p></div>
+      ${linkHtml}
+    </div>
+  `;
+}
+
+function closeTrialModal() {
+  trialModal.classList.remove('visible');
+  document.body.style.overflow = '';
+  setTimeout(() => { trialModal.hidden = true; }, 220);
+}
+
+modalCloseBtn.addEventListener('click', closeTrialModal);
+trialModal.addEventListener('click', (e) => { if (e.target === trialModal) closeTrialModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !trialModal.hidden) closeTrialModal(); });
+
+document.addEventListener('DOMContentLoaded', loadTrialDatabase);
+</script>
+
+</body>
+</html>
