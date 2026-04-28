@@ -6,11 +6,16 @@
 // is set as an environment variable in Vercel (never exposed to the browser).
 
 import Anthropic from "@anthropic-ai/sdk";
-import trials from "../data/trials.json" assert { type: "json" };
+import fs from "fs";
+import path from "path";
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+// Load the trial database from disk at module load time
+const trialsPath = path.join(process.cwd(), "data", "trials.json");
+const trials = JSON.parse(fs.readFileSync(trialsPath, "utf-8"));
 
 // The patterns Aklima identified during her analysis. These give Claude
 // curated priors so it can name patterns precisely instead of inventing them.
@@ -127,7 +132,6 @@ CALIBRATION:
 Return up to 4 patterns_flagged (only include real ones), exactly 3 similar_trials, and 3-5 recommendations.`;
 
 export default async function handler(req, res) {
-  // CORS / method
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -171,16 +175,13 @@ Now produce the JSON pre-mortem analysis as specified in your instructions.`;
       messages: [{ role: "user", content: userMessage }],
     });
 
-    // Extract text content
     const text = message.content
       .filter((b) => b.type === "text")
       .map((b) => b.text)
       .join("");
 
-    // Parse the JSON Claude returned
     let parsed;
     try {
-      // Strip any accidental markdown code fences
       const cleaned = text
         .replace(/^```(?:json)?\s*/i, "")
         .replace(/```\s*$/i, "")
