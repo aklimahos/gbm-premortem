@@ -20,8 +20,8 @@ KNOWN FAILURE PATTERNS IN THIS DATABASE (use these names verbatim when they fit)
    Trial advanced on a Phase 2 result that was borderline (p ~0.03-0.10), small,
    or compared against historical controls. The Phase 3 effect was substantially
    smaller or absent. Examples in DB: CENTRIC, ACT IV, INTELLANCE-1 (advanced
-   on INTELLANCE-2 p=0.06). HIGH SEVERITY when user's Phase 2 evidence is
-   borderline / historical / single-arm.
+   on INTELLANCE-2 p=0.06). HIGH SEVERITY when Phase 2 evidence is borderline,
+   historical, or single-arm.
 
 2. Pseudoresponse (anti-angiogenic class)
    Anti-angiogenic drugs (anti-VEGF, anti-VEGFR, anti-integrin) reduce contrast
@@ -73,6 +73,9 @@ POSITIVE COMPARATORS (in DB, succeeded):
 const SYSTEM_PROMPT = `You are a senior clinical research analyst conducting pre-mortem analysis on proposed Phase 3 glioblastoma trials. You have access to a curated database of 21 historical GBM trials.
 
 Your job: read the user's proposed trial design, compare it against the database, and identify which historical failures it most resembles and which failure patterns it is most likely to repeat.
+
+INPUT FORMAT:
+The user provides a free-text description of their trial (drug, dose, mechanism, sample size, endpoint, Phase 2 evidence, comparator, etc.) plus three structured fields: target class, setting, biomarker enrichment. Parse details out of the description as needed. If a critical detail is missing from the description (e.g. primary endpoint, Phase 2 evidence strength), say so in your analysis rather than inventing it.
 
 GROUNDING RULES:
 - Every claim about a past trial must be grounded in the database fields you are given. Do not invent trial names, drug effects, p-values, or hazard ratios.
@@ -176,22 +179,33 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { drug, mechanism, target_class, setting, biomarker, endpoint, phase2, context } = req.body || {};
+    const body = req.body || {};
+    // New payload shape: free-text description + 3 structured fields.
+    // Also accept legacy shape (drug/mechanism/...) for backward compatibility.
+    const description = body.description || [
+      body.drug && `Drug: ${body.drug}`,
+      body.mechanism && `Mechanism: ${body.mechanism}`,
+      body.endpoint && `Primary endpoint: ${body.endpoint}`,
+      body.phase2 && `Phase 2 evidence: ${body.phase2}`,
+      body.context && `Other context: ${body.context}`,
+    ].filter(Boolean).join("\n");
 
-    if (!drug || !mechanism || !target_class || !setting || !biomarker || !endpoint || !phase2) {
+    const target_class = body.target_class;
+    const setting = body.setting;
+    const biomarker = body.biomarker;
+
+    if (!description || !target_class || !setting || !biomarker) {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
     const userMessage = `PROPOSED TRIAL DESIGN
 ======================
-Drug / intervention: ${drug}
-Mechanism of action: ${mechanism}
 Target class: ${target_class}
 Setting: ${setting}
 Biomarker enrichment: ${biomarker}
-Primary endpoint: ${endpoint}
-Phase 2 evidence strength: ${phase2}
-Additional context: ${context || "(none provided)"}
+
+Description (free text — parse out drug, dose, mechanism, sample size, primary endpoint, Phase 2 evidence, comparator, etc.):
+${description}
 
 DATABASE - 21 GBM TRIALS
 =========================
