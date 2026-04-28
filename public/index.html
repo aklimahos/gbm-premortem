@@ -648,7 +648,7 @@
   <section class="panel">
     <div class="panel-header">
       <p class="panel-title">Your trial idea</p>
-      <span class="panel-step">8 questions</span>
+      <span class="panel-step">9 questions</span>
     </div>
     <div class="panel-body">
       <form id="trial-form">
@@ -731,16 +731,27 @@
           </div>
         </div>
 
-        <div class="field">
-          <label for="evidence_strength">How strong is the earlier evidence it might work?</label>
-          <p class="hint">What do you have so far — preclinical data, small studies, larger trials? The stronger the prior evidence, the lower the risk that the trial fails for surprise reasons.</p>
-          <select id="evidence_strength" name="evidence_strength" required>
-            <option value="">Select…</option>
-            <option value="strong (randomized prior data)">Strong — earlier randomized studies in humans showed clear benefit</option>
-            <option value="moderate (small human studies)">Moderate — earlier small studies suggested it might work</option>
-            <option value="weak (preclinical only)">Weak — only lab or animal evidence so far</option>
-            <option value="very weak (hypothesis only)">Very weak — mostly a hypothesis, no real data yet</option>
-          </select>
+        <div class="field-row">
+          <div class="field">
+            <label for="evidence_strength">How strong is the earlier evidence?</label>
+            <select id="evidence_strength" name="evidence_strength" required>
+              <option value="">Select…</option>
+              <option value="strong (randomized prior data)">Strong — earlier randomized studies showed benefit</option>
+              <option value="moderate (small human studies)">Moderate — small human studies suggested it works</option>
+              <option value="weak (preclinical only)">Weak — only lab or animal evidence</option>
+              <option value="very weak (hypothesis only)">Very weak — mostly hypothesis, no data yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="blinding">Will people know who got which treatment?</label>
+            <select id="blinding" name="blinding" required>
+              <option value="">Select…</option>
+              <option value="open-label">Yes — everyone knows (open-label)</option>
+              <option value="single-blind">Doctors know, patients don't (single-blind)</option>
+              <option value="double-blind">Neither doctors nor patients know (double-blind)</option>
+              <option value="not applicable (single-arm)">Doesn't apply — no comparison group</option>
+            </select>
+          </div>
         </div>
 
       </form>
