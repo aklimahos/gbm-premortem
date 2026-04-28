@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBM Trial Pre-Mortem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F5EE;
+    --bg-card: #FFFFFF;
+    --ink: #1A1A1A;
+    --ink-soft: #4A4A4A;
+    --ink-muted: #8A8A8A;
+    --rule: #D8D2C4;
+    --rule-soft: #E8E3D6;
+    --accent: #8B1A1A;
+    --accent-soft: #F2E8E8;
+    --warn: #B8860B;
+    --warn-soft: #F5EFE0;
+    --ok: #2D5016;
+    --ok-soft: #E8EFE0;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 32px 96px;
+  }
+
+  /* Masthead */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 16px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+  .lede {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 600px;
+  }
+  .meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+  .meta span::before {
+    content: "—";
+    margin-right: 8px;
+    color: var(--rule);
+  }
+  .meta span:first-child::before { display: none; }
+
+  /* Section headings */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Form */
+  form { margin: 0; }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 32px;
+    margin-bottom: 32px;
+  }
+  .field { display: flex; flex-direction: column; }
+  .field.full { grid-column: 1 / -1; }
+  label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .hint {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 6px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-style: italic;
+  }
+  input[type="text"], select, textarea {
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 12px 14px;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+  }
+
+  button[type="submit"] {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bg-card);
+    background: var(--ink);
+    border: none;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button[type="submit"]:hover:not(:disabled) { background: var(--accent); }
+  button[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Results */
+  .results { margin-top: 64px; display: none; }
+  .results.visible { display: block; }
+
+  .verdict {
+    border: 1px solid var(--rule);
+    background: var(--bg-card);
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+  .verdict-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .verdict-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .verdict-rating {
+    font-family: var(--serif);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .verdict-rating.high { color: var(--accent); }
+  .verdict-rating.medium { color: var(--warn); }
+  .verdict-rating.low { color: var(--ok); }
+  .verdict-summary {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .block { margin-bottom: 48px; }
+  .block-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0 0 24px;
+    line-height: 1.2;
+  }
+
+  .pattern {
+    border-left: 3px solid var(--accent);
+    padding: 16px 0 16px 20px;
+    margin-bottom: 20px;
+  }
+  .pattern.medium { border-left-color: var(--warn); }
+  .pattern.low { border-left-color: var(--ok); }
+  .pattern-name {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .pattern-evidence {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .pattern-text {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .trial {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .trial:last-child { border-bottom: none; }
+  .trial-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .trial-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .trial-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .trial-stats {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .trial-reasoning {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .recs ol {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: rec;
+  }
+  .recs li {
+    counter-increment: rec;
+    padding: 16px 0 16px 48px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .recs li:last-child { border-bottom: none; }
+  .recs li::before {
+    content: counter(rec, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .disclaimer {
+    border: 1px solid var(--rule);
+    background: var(--accent-soft);
+    padding: 20px 24px;
+    margin-top: 48px;
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .disclaimer strong {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 80px 0;
+    display: none;
+  }
+  .loading.visible { display: block; }
+  .loading-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .loading-dots {
+    display: inline-block;
+    margin-left: 4px;
+    width: 24px;
+  }
+  .loading-dots::after {
+    content: "...";
+    animation: dots 1.4s infinite;
+  }
+  @keyframes dots {
+    0%, 20% { content: "."; }
+    40% { content: ".."; }
+    60%, 100% { content: "..."; }
+  }
+
+  .error {
+    border: 1px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 20px 24px;
+    color: var(--accent);
+    font-size: 14px;
+    margin-top: 32px;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 96px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+  footer a { color: var(--ink-soft); text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .page { padding: 40px 20px 64px; }
+    h1 { font-size: 40px; }
+    .lede { font-size: 18px; }
+    .form-grid { grid-template-columns: 1fr; gap: 20px; }
+    .verdict { padding: 24px; }
+    .verdict-rating { font-size: 32px; }
+    .meta { flex-wrap: wrap; gap: 12px; }
+    .meta span::before { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">A clinical research instrument</p>
+    <h1>GBM trial pre-mortem</h1>
+    <p class="lede">Stress-test a proposed Phase 3 glioblastoma trial design against twenty-one historical trials. Surface the failure patterns it is most likely to repeat — before the trial begins.</p>
+    <div class="meta">
+      <span>21 trials in database</span>
+      <span>2005 – 2024 readouts</span>
+      <span>Phase 3 + supporting Phase 2</span>
+    </div>
+  </header>
+
+  <section>
+    <p class="section-label">Submit a trial design</p>
+    <form id="trial-form">
+      <div class="form-grid">
+
+        <div class="field full">
+          <label for="drug">Drug or intervention</label>
+          <input type="text" id="drug" name="drug" placeholder="e.g. anti-VEGF monoclonal antibody, dose 10 mg/kg q2w" required>
+        </div>
+
+        <div class="field full">
+          <label for="mechanism">Mechanism of action</label>
+          <input type="text" id="mechanism" name="mechanism" placeholder="e.g. blocks VEGF–VEGFR2 binding, inhibits tumor angiogenesis" required>
+        </div>
+
+        <div class="field">
+          <label for="target_class">Target class</label>
+          <select id="target_class" name="target_class" required>
+            <option value="">Select…</option>
+            <option>anti-angiogenic</option>
+            <option>anti-angiogenic / cell adhesion</option>
+            <option>anti-angiogenic / VEGFR TKI</option>
+            <option>immune checkpoint inhibitor (PD-1)</option>
+            <option>immune checkpoint inhibitor (PD-L1)</option>
+            <option>immune checkpoint inhibitor (CTLA-4)</option>
+            <option>antibody-drug conjugate</option>
+            <option>peptide vaccine / immunotherapy</option>
+            <option>cancer vaccine / cell therapy</option>
+            <option>kinase inhibitor</option>
+            <option>proteasome inhibitor</option>
+            <option>alkylator chemotherapy</option>
+            <option>alkylator combination</option>
+            <option>device / physical therapy</option>
+            <option>CAR-T / cell therapy</option>
+            <option>other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="setting">Setting</label>
+          <select id="setting" name="setting" required>
+            <option value="">Select…</option>
+            <option>newly diagnosed</option>
+            <option>recurrent</option>
+            <option>recurrent (first recurrence)</option>
+            <option>newly diagnosed AND recurrent</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="biomarker">Biomarker enrichment</label>
+          <select id="biomarker" name="biomarker" required>
+            <option value="">Select…</option>
+            <option>none (all-comers)</option>
+            <option>MGMT-methylated</option>
+            <option>MGMT-unmethylated</option>
+            <option>EGFR-amplified</option>
+            <option>EGFRvIII+</option>
+            <option>IDH-mutant</option>
+            <option>other molecular</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="endpoint">Primary endpoint</label>
+          <select id="endpoint" name="endpoint" required>
+            <option value="">Select…</option>
+            <option>OS</option>
+            <option>PFS</option>
+            <option>co-primary OS and PFS</option>
+            <option>PFS at 6 months</option>
+            <option>OS in selected subpopulation</option>
+            <option>other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="phase2">Phase 2 evidence strength</label>
+          <select id="phase2" name="phase2" required>
+            <option value="">Select…</option>
+            <option value="strong">Strong (p &lt; 0.01, replicated)</option>
+            <option value="moderate">Moderate (p = 0.01 – 0.05)</option>
+            <option value="borderline">Borderline (p = 0.05 – 0.10)</option>
+            <option value="historical">Historical control comparison only</option>
+            <option value="single-arm">Single-arm Phase 2 vs literature</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="context">Additional context (optional)</label>
+          <textarea id="context" name="context" placeholder="Sample size, dose schedule, prior negative trials in the program, comparator arm details, anything else relevant…"></textarea>
+          <p class="hint">The more specific you are, the more grounded the analysis.</p>
+        </div>
+
+      </div>
+
+      <button type="submit" id="submit-btn">Run pre-mortem</button>
+    </form>
+  </section>
+
+  <div class="loading" id="loading">
+    <p class="loading-text">Cross-referencing 21 trials<span class="loading-dots"></span></p>
+  </div>
+
+  <div class="error" id="error" style="display:none"></div>
+
+  <section class="results" id="results">
+
+    <div class="verdict">
+      <div class="verdict-row">
+        <span class="verdict-label">Risk verdict</span>
+        <span class="verdict-rating" id="verdict-rating">—</span>
+      </div>
+      <p class="verdict-summary" id="verdict-summary"></p>
+    </div>
+
+    <div class="block">
+      <p class="section-label">Failure patterns flagged</p>
+      <div id="patterns"></div>
+    </div>
+
+    <div class="block">
+      <p class="section-label">Most similar past trials</p>
+      <div id="similar-trials"></div>
+    </div>
+
+    <div class="block recs">
+      <p class="section-label">Recommendations</p>
+      <ol id="recommendations"></ol>
+    </div>
+
+    <div class="disclaimer">
+      <strong>What this is and isn't</strong>
+      This tool surfaces patterns from a hand-curated database of 21 historical glioblastoma trials. It is a research aid for trial pre-mortem analysis, not a regulatory or statistical predictor. Where the database is thin (e.g. only one trial of a given mechanism), the analysis says so. Use this as a structured second opinion, not a verdict.
+    </div>
+
+  </section>
+
+  <footer>
+    Built by Aklima Hossain · 21-trial GBM Phase 3 failure database<br>
+    Reasoning powered by Claude · Source data verified against PubMed and trial publications
+  </footer>
+
+</div>
+
+<script>
+const form = document.getElementById('trial-form');
+const submitBtn = document.getElementById('submit-btn');
+const loading = document.getElementById('loading');
+const results = document.getElementById('results');
+const errorBox = document.getElementById('error');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Collect form data
+  const formData = new FormData(form);
+  const payload = Object.fromEntries(formData.entries());
+
+  // Reset UI
+  errorBox.style.display = 'none';
+  results.classList.remove('visible');
+  loading.classList.add('visible');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Analyzing…';
+
+  try {
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({error: 'Server error'}));
+      throw new Error(err.error || `Request failed (${response.status})`);
+    }
+
+    const data = await response.json();
+    renderResults(data);
+
+  } catch (err) {
+    errorBox.textContent = `Could not run analysis: ${err.message}. Check that your API key is configured in Vercel environment variables.`;
+    errorBox.style.display = 'block';
+  } finally {
+    loading.classList.remove('visible');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Run pre-mortem';
+  }
+});
+
+function renderResults(data) {
+  // Verdict
+  const rating = (data.risk_rating || 'unknown').toLowerCase();
+  const ratingEl = document.getElementById('verdict-rating');
+  ratingEl.textContent = rating.toUpperCase();
+  ratingEl.className = 'verdict-rating ' + rating;
+  document.getElementById('verdict-summary').textContent = data.verdict_summary || '';
+
+  // Patterns
+  const patternsEl = document.getElementById('patterns');
+  patternsEl.innerHTML = '';
+  (data.patterns_flagged || []).forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'pattern ' + (p.severity || 'high').toLowerCase();
+    div.innerHTML = `
+      <p class="pattern-name">${escapeHtml(p.name)}</p>
+      <p class="pattern-evidence">${escapeHtml(p.evidence_strength || '')}</p>
+      <p class="pattern-text">${escapeHtml(p.explanation)}</p>
+    `;
+    patternsEl.appendChild(div);
+  });
+  if (!(data.patterns_flagged || []).length) {
+    patternsEl.innerHTML = '<p class="trial-reasoning"><em>No high-risk patterns identified for this profile.</em></p>';
+  }
+
+  // Similar trials
+  const trialsEl = document.getElementById('similar-trials');
+  trialsEl.innerHTML = '';
+  (data.similar_trials || []).forEach(t => {
+    const div = document.createElement('div');
+    div.className = 'trial';
+    const stats = t.outcome_stats ? `<p class="trial-stats">${escapeHtml(t.outcome_stats)}</p>` : '';
+    div.innerHTML = `
+      <div class="trial-head">
+        <span class="trial-name">${escapeHtml(t.name)}</span>
+        <span class="trial-tag">${escapeHtml(t.year || '')} · ${escapeHtml(t.outcome || '')}</span>
+      </div>
+      ${stats}
+      <p class="trial-reasoning">${escapeHtml(t.match_reasoning)}</p>
+    `;
+    trialsEl.appendChild(div);
+  });
+
+  // Recommendations
+  const recsEl = document.getElementById('recommendations');
+  recsEl.innerHTML = '';
+  (data.recommendations || []).forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = r;
+    recsEl.appendChild(li);
+  });
+
+  results.classList.add('visible');
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+</body>
+</html>
