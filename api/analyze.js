@@ -95,6 +95,8 @@ The JSON object must have exactly this shape:
 
 {
   "risk_rating": "HIGH",
+  "verdict_headline": "Not worth conducting as designed.",
+  "plain_explanation": "Two large trials with this exact design have already failed — patients didn't live longer.",
   "verdict_summary": "One sentence, max 30 words.",
   "patterns_flagged": [
     {
@@ -120,6 +122,9 @@ The JSON object must have exactly this shape:
 
 Field constraints:
 - risk_rating: must be exactly "HIGH" or "MEDIUM" or "LOW" (uppercase string)
+- verdict_headline: 4-8 words, blunt, no jargon. For HIGH use phrasing like "Not worth conducting as designed." For MEDIUM use "Reconsider before running this." For LOW use "Worth pursuing as designed." Always end with a period.
+- plain_explanation: ONE sentence, max 25 words, plain English a university student understands. No abbreviations like OS/PFS/HR. No drug class jargon. Explain WHY in everyday terms (e.g. "Patients didn't live longer", "Tumor shrank but cancer still came back", "No similar trials in the database to compare against").
+- verdict_summary: ONE sentence, max 30 words. Technical clinical language is fine here — this is the detailed version.
 - severity: must be exactly "HIGH" or "MEDIUM" or "LOW"
 - outcome: must be exactly "FAILED" or "SUCCEEDED" or "MIXED"
 - patterns_flagged: 1 to 4 items

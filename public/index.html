@@ -415,14 +415,41 @@
   .verdict-rating.high { background: var(--high-bg); color: var(--high); }
   .verdict-rating.medium { background: var(--med-bg); color: var(--med); }
   .verdict-rating.low { background: var(--low-bg); color: var(--low); }
+  .verdict-headline {
+    margin: 0 0 12px;
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 1.2;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .verdict-plain {
+    margin: 0 0 16px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .verdict-divider {
+    border: 0;
+    border-top: 1px solid var(--rule-soft);
+    margin: 0 0 14px;
+  }
+  .verdict-detail-label {
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
   .verdict-summary {
     margin: 0;
-    font-family: var(--serif);
-    font-size: 19px;
-    line-height: 1.45;
-    color: var(--ink);
-    font-weight: 500;
-    letter-spacing: -0.005em;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    font-style: italic;
   }
 
   .block {
@@ -692,6 +719,10 @@
         <span class="verdict-label">Risk verdict</span>
         <span class="verdict-rating" id="verdict-rating">—</span>
       </div>
+      <h2 class="verdict-headline" id="verdict-headline"></h2>
+      <p class="verdict-plain" id="verdict-plain"></p>
+      <hr class="verdict-divider">
+      <p class="verdict-detail-label">Clinical detail</p>
       <p class="verdict-summary" id="verdict-summary"></p>
     </div>
 
@@ -774,6 +805,18 @@ function renderResults(data) {
   ratingEl.textContent = rating.toUpperCase();
   ratingEl.className = 'verdict-rating ' + rating;
   document.getElementById('verdict-card').className = 'verdict-card ' + rating;
+
+  // Three-tier verdict: blunt headline -> plain-English why -> technical detail
+  // Fallbacks if older API response doesn't include the new fields
+  const fallbackHeadlines = {
+    high: 'Not worth conducting as designed.',
+    medium: 'Reconsider before running this.',
+    low: 'Worth pursuing as designed.'
+  };
+  document.getElementById('verdict-headline').textContent =
+    data.verdict_headline || fallbackHeadlines[rating] || '';
+  document.getElementById('verdict-plain').textContent =
+    data.plain_explanation || '';
   document.getElementById('verdict-summary').textContent = data.verdict_summary || '';
 
   const patternsEl = document.getElementById('patterns');
