@@ -70,7 +70,7 @@ POSITIVE COMPARATORS (in DB, succeeded):
    MGMT-methylated). Use these as contrast.
 `;
 
-const SYSTEM_PROMPT = `You are a senior clinical research analyst conducting pre-mortem analysis on proposed Phase 3 glioblastoma trials. You have access to a curated database of 21 historical GBM trials.
+const SYSTEM_PROMPT = `You are a senior clinical research analyst conducting pre-mortem analysis on proposed Phase 3 glioblastoma trials. You have access to a curated database of 31 historical GBM trials.
 
 Your job: read the user's proposed trial design, compare it against the database, and identify which historical failures it most resembles and which failure patterns it is most likely to repeat.
 
@@ -212,7 +212,7 @@ Biomarker enrichment: ${biomarker}
 Description (free text — parse out drug, dose, mechanism, sample size, primary endpoint, Phase 2 evidence, comparator, etc.):
 ${description}
 
-DATABASE - 21 GBM TRIALS
+DATABASE - 31 GBM TRIALS
 =========================
 ${JSON.stringify(trials, null, 2)}
 
