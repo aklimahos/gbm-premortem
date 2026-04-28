@@ -238,7 +238,11 @@ ${PATTERN_LIBRARY}
 Now produce the JSON pre-mortem analysis. The user filled out a structured 8-question form. Pattern-match against the database using the structured fields. If a critical detail is missing or marked "not specified", say so in your analysis rather than inventing it. Return ONLY the JSON object - start with { and end with }. No other text, no preamble, no markdown fences.`;
 
     const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+      // Back on Sonnet 4.6: Haiku was returning malformed JSON for this
+      // particular prompt (31-trial DB + pattern library is complex enough
+      // that Sonnet's reliability beats Haiku's speed). Speed wins kept:
+      // smaller prompt (notes stripped) and lower max_tokens.
+      model: "claude-sonnet-4-6",
       max_tokens: 1800,
       system: SYSTEM_PROMPT,
       messages: [
