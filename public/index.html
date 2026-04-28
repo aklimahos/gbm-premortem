@@ -620,64 +620,53 @@
 
   <section class="panel">
     <div class="panel-header">
-      <p class="panel-title">Your proposed trial</p>
-      <span class="panel-step">4 fields</span>
+      <p class="panel-title">Your trial idea</p>
+      <span class="panel-step">4 questions</span>
     </div>
     <div class="panel-body">
       <form id="trial-form">
 
         <div class="field">
-          <label for="description">Describe the trial</label>
-          <p class="hint">Drug name and dose, mechanism of action, sample size, primary endpoint, Phase 2 evidence, comparator arm. Full sentences are fine.</p>
-          <textarea id="description" name="description" required placeholder="e.g. Bevacizumab 10 mg/kg q2w, anti-VEGF mAb, added to standard temozolomide + radiotherapy. ~600 patients, newly diagnosed GBM, all-comers. Co-primary endpoints OS and PFS. Phase 2 evidence: BRAIN single-arm and Lai 2011, both non-comparative. Comparator: TMZ + RT alone."></textarea>
+          <label for="description">Tell us about your treatment idea</label>
+          <p class="hint">What's the treatment, who would get it, and what would you compare it against? Full sentences are fine — don't overthink it.</p>
+          <textarea id="description" name="description" required placeholder="e.g. A drug that blocks blood vessel growth in tumors, given alongside standard chemo and radiation. Tested in about 600 newly-diagnosed brain cancer patients. Compared against the standard treatment alone."></textarea>
         </div>
 
         <div class="field-row">
           <div class="field">
-            <label for="target_class">Target class</label>
+            <label for="target_class">What kind of treatment is it?</label>
             <select id="target_class" name="target_class" required>
               <option value="">Select…</option>
-              <option>anti-angiogenic</option>
-              <option>anti-angiogenic / cell adhesion</option>
-              <option>anti-angiogenic / VEGFR TKI</option>
-              <option>immune checkpoint inhibitor (PD-1)</option>
-              <option>immune checkpoint inhibitor (PD-L1)</option>
-              <option>immune checkpoint inhibitor (CTLA-4)</option>
-              <option>antibody-drug conjugate</option>
-              <option>peptide vaccine / immunotherapy</option>
-              <option>cancer vaccine / cell therapy</option>
-              <option>kinase inhibitor</option>
-              <option>proteasome inhibitor</option>
-              <option>alkylator chemotherapy</option>
-              <option>alkylator combination</option>
-              <option>device / physical therapy</option>
-              <option>CAR-T / cell therapy</option>
-              <option>other</option>
+              <option value="anti-angiogenic">A drug that blocks tumor blood vessels (anti-angiogenic)</option>
+              <option value="immune checkpoint inhibitor (PD-1)">A drug that boosts the immune system (immunotherapy)</option>
+              <option value="cancer vaccine / cell therapy">A cancer vaccine or cell therapy</option>
+              <option value="kinase inhibitor">A drug that targets a specific tumor mutation</option>
+              <option value="alkylator chemotherapy">Chemotherapy</option>
+              <option value="device / physical therapy">A medical device</option>
+              <option value="other">Something else</option>
             </select>
           </div>
           <div class="field">
-            <label for="setting">Setting</label>
+            <label for="setting">When would patients get it?</label>
             <select id="setting" name="setting" required>
               <option value="">Select…</option>
-              <option>newly diagnosed</option>
-              <option>recurrent</option>
-              <option>recurrent (first recurrence)</option>
-              <option>newly diagnosed AND recurrent</option>
+              <option value="newly diagnosed">When first diagnosed</option>
+              <option value="recurrent">After the cancer comes back</option>
+              <option value="newly diagnosed AND recurrent">Both</option>
             </select>
           </div>
         </div>
 
         <div class="field">
-          <label for="biomarker">Biomarker enrichment</label>
+          <label for="biomarker">Are you only including a specific group of patients?</label>
           <select id="biomarker" name="biomarker" required>
             <option value="">Select…</option>
-            <option>none (all-comers)</option>
-            <option>MGMT-methylated</option>
-            <option>MGMT-unmethylated</option>
-            <option>EGFR-amplified</option>
-            <option>EGFRvIII+</option>
-            <option>IDH-mutant</option>
-            <option>other molecular</option>
+            <option value="none (all-comers)">No — anyone with the disease</option>
+            <option value="MGMT-methylated">Only patients whose tumors respond well to chemo (MGMT methylated)</option>
+            <option value="MGMT-unmethylated">Only patients whose tumors resist chemo (MGMT unmethylated)</option>
+            <option value="EGFR-amplified">Only patients with EGFR-related mutations</option>
+            <option value="IDH-mutant">Only patients with IDH mutations</option>
+            <option value="other molecular">Some other specific subgroup</option>
           </select>
         </div>
 
