@@ -78,7 +78,8 @@ function extractJson(text) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
+  // GET so Vercel's edge can cache identical trial requests
+  if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
@@ -89,9 +90,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { trial_name } = req.body || {};
+    const trial_name = req.query.trial || (req.query && req.query.trial_name);
     if (!trial_name) {
-      return res.status(400).json({ error: "Missing trial_name." });
+      return res.status(400).json({ error: "Missing ?trial= parameter." });
     }
 
     const trial = trials.find((t) => t.name === trial_name);
@@ -105,8 +106,8 @@ ${JSON.stringify(trial, null, 2)}
 Now produce the plain-English breakdown JSON object.`;
 
     const message = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 2000,
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1200,
       system: SYSTEM_PROMPT,
       messages: [
         { role: "user", content: userMessage },
@@ -130,6 +131,10 @@ Now produce the plain-English breakdown JSON object.`;
     parsed.name = trial.name;
     parsed.year = trial.year ? Math.round(trial.year) : null;
 
+    // Cache identical requests at the Vercel edge for 24 hours, serve stale
+    // for up to 7 days while revalidating in the background. First visitor
+    // pays the ~3-5s cost; everyone after gets near-instant response.
+    res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
     return res.status(200).json(parsed);
   } catch (err) {
     console.error("Handler error:", err);

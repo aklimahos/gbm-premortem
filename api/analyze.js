@@ -214,6 +214,10 @@ export default async function handler(req, res) {
       ? `\n\nAdditional free-text context (parse for any other relevant details):\n${description}`
       : "";
 
+    // Strip verbose 'notes' field from trial data — it's source-citation
+    // context for humans, not signal for the AI's pattern matching.
+    const compactTrials = trials.map(({ notes, ...rest }) => rest);
+
     const userMessage = `PROPOSED TRIAL DESIGN
 ======================
 Target class:           ${target_class}
@@ -227,15 +231,15 @@ Delivery to tumor:      ${delivery}${descriptionBlock}
 
 DATABASE - 31 GBM TRIALS
 =========================
-${JSON.stringify(trials, null, 2)}
+${JSON.stringify(compactTrials, null, 2)}
 
 ${PATTERN_LIBRARY}
 
 Now produce the JSON pre-mortem analysis. The user filled out a structured 8-question form. Pattern-match against the database using the structured fields. If a critical detail is missing or marked "not specified", say so in your analysis rather than inventing it. Return ONLY the JSON object - start with { and end with }. No other text, no preamble, no markdown fences.`;
 
     const message = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 2500,
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1800,
       system: SYSTEM_PROMPT,
       messages: [
         { role: "user", content: userMessage },
