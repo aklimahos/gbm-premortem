@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>glio.ai — pre-mortem for glioblastoma trials</title>
+<title>glio.ai · pre-mortem for glioblastoma trials</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -48,7 +48,7 @@
     background-attachment: fixed;
   }
 
-  /* Top bar — soft, ribbon-like */
+  /* Top bar: soft, ribbon-like */
   .appbar {
     background: var(--surface);
     border-bottom: 1px solid var(--rule);
@@ -101,6 +101,32 @@
   /* Hero */
   .hero {
     margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+  .hero-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .hero-icon {
+    flex-shrink: 0;
+    width: 130px;
+    height: 130px;
+    filter: drop-shadow(0 6px 18px rgba(184, 106, 106, 0.18));
+  }
+  .hero-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  @media (max-width: 600px) {
+    .hero {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .hero-icon { width: 88px; height: 88px; }
   }
   .eyebrow {
     font-size: 12px;
@@ -774,17 +800,87 @@
 <div class="page">
 
   <section class="hero">
-    <p class="eyebrow">Your AI second opinion on running a trial</p>
-    <h1>A pre-mortem for your glioblastoma trial.</h1>
-    <p class="lede">Match your idea against 31 historical brain cancer trials and see which past failures it most resembles.</p>
+    <div class="hero-text">
+      <p class="eyebrow">Your AI second opinion on running a trial</p>
+      <h1>A pre-mortem for your glioblastoma trial.</h1>
+      <p class="lede">Match your idea against 31 historical brain cancer trials and see which past failures it most resembles.</p>
+    </div>
+    <div class="hero-icon" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F8E6E3"/>
+            <stop offset="55%" stop-color="#E8B6B6"/>
+            <stop offset="100%" stop-color="#C88282"/>
+          </linearGradient>
+          <radialGradient id="brainHilite" cx="35%" cy="30%" r="40%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- soft circle backdrop -->
+        <circle cx="60" cy="60" r="55" fill="#FCF7F2"/>
+
+        <!-- brain shape: two soft lobes -->
+        <g transform="translate(60 62)">
+          <path d="M 0 -36
+                   C -10 -38, -22 -34, -26 -24
+                   C -36 -24, -42 -14, -38 -4
+                   C -42 4, -38 12, -32 14
+                   C -32 22, -26 28, -18 26
+                   C -14 32, -4 34, 0 30
+                   C 4 34, 14 32, 18 26
+                   C 26 28, 32 22, 32 14
+                   C 38 12, 42 4, 38 -4
+                   C 42 -14, 36 -24, 26 -24
+                   C 22 -34, 10 -38, 0 -36 Z"
+                fill="url(#brainGrad)"
+                stroke="#B86A6A"
+                stroke-width="2"
+                stroke-linejoin="round"/>
+
+          <!-- highlight overlay for soft 3D feel -->
+          <path d="M 0 -36
+                   C -10 -38, -22 -34, -26 -24
+                   C -36 -24, -42 -14, -38 -4
+                   C -42 4, -38 12, -32 14
+                   C -32 22, -26 28, -18 26
+                   C -14 32, -4 34, 0 30
+                   C 4 34, 14 32, 18 26
+                   C 26 28, 32 22, 32 14
+                   C 38 12, 42 4, 38 -4
+                   C 42 -14, 36 -24, 26 -24
+                   C 22 -34, 10 -38, 0 -36 Z"
+                fill="url(#brainHilite)"/>
+
+          <!-- central sulcus -->
+          <path d="M 0 -34 C -2 -10, -2 10, 0 28"
+                stroke="#B86A6A"
+                stroke-width="1.6"
+                fill="none"
+                stroke-linecap="round"/>
+
+          <!-- left hemisphere gyri -->
+          <path d="M -22 -16 Q -16 -19, -10 -14" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M -26 -2 Q -16 -4, -8 -1" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M -22 12 Q -14 9, -8 13" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+
+          <!-- right hemisphere gyri -->
+          <path d="M 22 -16 Q 16 -19, 10 -14" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M 26 -2 Q 16 -4, 8 -1" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M 22 12 Q 14 9, 8 13" stroke="#B86A6A" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
   </section>
 
   <section class="explainer">
     <p class="explainer-title">What this does</p>
-    <p>Describe a glioblastoma (brain cancer) trial idea — what the treatment is, who would get it, and what you'd compare it against. The tool flags which past failures your design most resembles, and why.</p>
+    <p>Describe a glioblastoma (brain cancer) trial idea: what the treatment is, who would get it, and what you'd compare it against. The tool flags which past failures your design most resembles, and why.</p>
     <div class="example">
       <span class="label">Example</span>
-      "A drug that blocks tumor blood vessels, given to all patients — 3 of 3 trials with this profile failed in the database."
+      "A drug that blocks tumor blood vessels, given to all patients. 3 of 3 trials with this profile failed in the database."
     </div>
   </section>
 
@@ -798,7 +894,7 @@
 
         <div class="field">
           <label for="description">Tell us about your treatment idea</label>
-          <p class="hint">What's the treatment, who would get it, and what would you compare it against? Full sentences are fine — don't overthink it.</p>
+          <p class="hint">What's the treatment, who would get it, and what would you compare it against? Full sentences are fine. Don't overthink it.</p>
           <textarea id="description" name="description" required placeholder="e.g. A drug that blocks blood vessel growth in tumors, given alongside standard chemo and radiation. Tested in about 600 newly-diagnosed brain cancer patients. Compared against the standard treatment alone."></textarea>
         </div>
 
@@ -832,19 +928,19 @@
             <label for="biomarker">Including only a specific subgroup?</label>
             <select id="biomarker" name="biomarker" required>
               <option value="">Select…</option>
-              <option value="none (all-comers)">No — anyone with the disease</option>
-              <option value="biomarker-enriched (specific tumor mutation)">Yes — only patients with a specific tumor mutation</option>
-              <option value="patient-subgroup-enriched">Yes — only a specific patient subgroup</option>
+              <option value="none (all-comers)">No, anyone with the disease</option>
+              <option value="biomarker-enriched (specific tumor mutation)">Yes, only patients with a specific tumor mutation</option>
+              <option value="patient-subgroup-enriched">Yes, only a specific patient subgroup</option>
             </select>
           </div>
           <div class="field">
             <label for="sample_size">Roughly how many patients?</label>
             <select id="sample_size" name="sample_size" required>
               <option value="">Select…</option>
-              <option value="small (under 50)">Small — under 50 patients</option>
-              <option value="medium (50-200)">Medium — 50 to 200 patients</option>
-              <option value="large (200-1000)">Large — 200 to 1,000 patients</option>
-              <option value="very large (1000+)">Very large — over 1,000 patients</option>
+              <option value="small (under 50)">Small (under 50 patients)</option>
+              <option value="medium (50-200)">Medium (50 to 200 patients)</option>
+              <option value="large (200-1000)">Large (200 to 1,000 patients)</option>
+              <option value="very large (1000+)">Very large (over 1,000 patients)</option>
             </select>
           </div>
         </div>
@@ -894,7 +990,7 @@
     <div class="verdict-card" id="verdict-card">
       <div class="verdict-row">
         <span class="verdict-label">Risk verdict</span>
-        <span class="verdict-rating" id="verdict-rating">—</span>
+        <span class="verdict-rating" id="verdict-rating"></span>
       </div>
       <h2 class="verdict-headline" id="verdict-headline"></h2>
       <p class="verdict-plain" id="verdict-plain"></p>
@@ -920,7 +1016,7 @@
 
     <div class="disclaimer">
       <strong>What this is and isn't</strong>
-      A research aid surfacing patterns from 31 historical glioblastoma trials. Not a regulatory or statistical predictor — a structured second opinion, not a verdict.
+      A research aid surfacing patterns from 31 historical glioblastoma trials. Not a regulatory or statistical predictor. A structured second opinion, not a verdict.
     </div>
 
   </section>
@@ -1098,14 +1194,14 @@ function renderTrialCards(trials, container) {
     const card = document.createElement('article');
     card.className = 'trial-card';
     const yearStr = t.year ? Math.round(t.year) : '';
-    const nStr = t.n ? Math.round(t.n) : '—';
+    const nStr = t.n ? Math.round(t.n) : '?';
     card.innerHTML = `
       <div class="trial-card-head">
         <div class="trial-card-title">
           ${escapeHtml(t.name)}<span class="trial-card-year">· ${yearStr}</span>
         </div>
       </div>
-      <p class="trial-card-meta">${escapeHtml(t.target_class || '—')} · ${escapeHtml(t.setting || '—')} · n=${nStr}</p>
+      <p class="trial-card-meta">${escapeHtml(t.target_class || '?')} · ${escapeHtml(t.setting || '?')} · n=${nStr}</p>
       ${stats ? `<p class="trial-card-stats">${escapeHtml(stats)}</p>` : ''}
       <p class="trial-card-summary">${escapeHtml(summary)}</p>
       <a class="trial-card-link" href="${link.url}" target="_blank" rel="noopener noreferrer">
