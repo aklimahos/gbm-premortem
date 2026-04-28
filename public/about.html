@@ -213,6 +213,22 @@
     color: var(--ink);
     display: block;
     margin-bottom: 2px;
+    font-size: 15px;
+  }
+  .pattern-list ol li em {
+    display: block;
+    color: var(--ink-muted);
+    font-style: italic;
+    font-size: 12.5px;
+    letter-spacing: 0.01em;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .pattern-list ol li span.body {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.6;
   }
 
   footer {
@@ -314,15 +330,51 @@
   <p>The pattern library was derived inductively by looking across the curated trials and identifying common modes of failure. Each pattern is named, defined, and tied to specific examples in the database.</p>
   <div class="pattern-list">
     <ol>
-      <li><strong>Phase 2 to Phase 3 effect-size collapse.</strong> Trial advanced on borderline Phase 2 evidence; the effect did not survive randomization.</li>
-      <li><strong>Pseudoresponse (anti-angiogenic class).</strong> Drug shrinks the imaging signal without changing tumor biology; PFS improves, OS does not.</li>
-      <li><strong>Cold-tumor immune therapy failure.</strong> GBM has low TMB and limited T-cell infiltrate; checkpoint inhibitors have failed across every subgroup tested.</li>
-      <li><strong>EGFR target frequency-vs-dependency mismatch.</strong> EGFR is amplified in roughly half of GBM but is not a true driver dependency.</li>
-      <li><strong>Standard-of-care drift.</strong> Phase 2 looked good against an outdated benchmark; by Phase 3 readout the contemporary control has improved.</li>
-      <li><strong>Active-comparator complications.</strong> Comparator arm has its own confounding effects (e.g., bevacizumab as control).</li>
-      <li><strong>Methodological corruption.</strong> Mid-trial endpoint changes, universal crossover, or comparison against external controls.</li>
-      <li><strong>PK or dose-schedule inadequacy.</strong> Drug given on a schedule that does not maintain therapeutic exposure given its half-life.</li>
-      <li><strong>Drug-class repeat failure.</strong> The proposed mechanism class has multiple prior Phase 3 failures in the indication for related reasons.</li>
+      <li>
+        <strong>The early result was too good to last.</strong>
+        <em>Phase 2 to Phase 3 effect-size collapse</em>
+        <span class="body">A drug looked promising in a small early study, often compared against historical patient data instead of a real control group. When tested in a properly designed bigger trial, the benefit shrank or disappeared.</span>
+      </li>
+      <li>
+        <strong>Tumor looks smaller, but patients don't live longer.</strong>
+        <em>Pseudoresponse (anti-angiogenic class)</em>
+        <span class="body">Some drugs shrink the bright signal that brain tumors give off on MRI scans without actually killing cancer cells. Tumors look smaller, scans look better, but patients don't live any longer. Most common with drugs that block tumor blood vessel growth.</span>
+      </li>
+      <li>
+        <strong>The immune system can't find brain cancer.</strong>
+        <em>Cold-tumor immune therapy failure</em>
+        <span class="body">Drugs that "wake up" the immune system (like Keytruda, the immunotherapy famous for treating melanoma and lung cancer) don't work in brain cancer. The tumor barely shows up to the immune system in the first place, so unleashing the immune system has nothing to attack.</span>
+      </li>
+      <li>
+        <strong>A broken gene that doesn't actually drive the cancer.</strong>
+        <em>EGFR target frequency-vs-dependency mismatch</em>
+        <span class="body">About half of brain cancer patients have a broken gene called EGFR. Sounds like an obvious target, except the cancer doesn't actually need EGFR to grow. Drugs that block it don't help, because EGFR being broken isn't what's keeping the cancer alive.</span>
+      </li>
+      <li>
+        <strong>The control treatment improved while the trial was running.</strong>
+        <em>Standard-of-care drift</em>
+        <span class="body">Trials take 5+ years. A drug that looked good in early studies might be compared against the standard treatment from when the trial started. By the time the trial finishes, regular treatment has improved enough that the new drug no longer looks impressive.</span>
+      </li>
+      <li>
+        <strong>The "control" drug had its own quirks.</strong>
+        <em>Active-comparator complications</em>
+        <span class="body">When a trial uses another active drug as the comparison group instead of a placebo, the comparison drug can have weird effects of its own (like making scans look better without actually helping), making it hard to tell if the new drug is doing anything.</span>
+      </li>
+      <li>
+        <strong>The trial's rules were changed mid-flight.</strong>
+        <em>Methodological corruption</em>
+        <span class="body">The trial was designed or run in ways that make the results hard to trust: the success criteria were changed after the trial started, patients in the control group switched to the new drug, or the comparison was made against patients from a totally different earlier trial.</span>
+      </li>
+      <li>
+        <strong>The drug never reached the tumor in useful amounts.</strong>
+        <em>PK or dose-schedule inadequacy</em>
+        <span class="body">The drug was given too rarely or at too low a dose to actually work. Whatever the trial measured, it wasn't really a fair test of the drug, just a test of the drug at a dose too weak to do much.</span>
+      </li>
+      <li>
+        <strong>Drugs that work this way have all failed before.</strong>
+        <em>Drug-class repeat failure</em>
+        <span class="body">Other drugs that work by the same mechanism have already been tested in brain cancer and have all failed. Without a meaningful change in the design, repeating the same kind of approach is unlikely to produce a different result.</span>
+      </li>
     </ol>
   </div>
 
