@@ -902,6 +902,167 @@
     transform: translateX(2px);
   }
 
+  /* Trial deep-dive modal */
+  .trial-card {
+    cursor: pointer;
+  }
+  .trial-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px rgba(184, 106, 106, 0.10);
+    transform: translateY(-1px);
+  }
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 33, 29, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal {
+    background: var(--surface);
+    border-radius: 16px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 64px rgba(155, 70, 70, 0.32), 0 4px 12px rgba(155, 70, 70, 0.12);
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.22s ease-out;
+  }
+  .modal-overlay.visible .modal {
+    transform: scale(1) translateY(0);
+  }
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--ink-muted);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: background 0.15s, color 0.15s;
+  }
+  .modal-close:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
+  }
+  .modal-content {
+    padding: 36px 40px 32px;
+  }
+  .modal-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    line-height: 1.15;
+    font-weight: 500;
+    margin: 0 0 4px;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  .modal-year {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin: 0 0 20px;
+    letter-spacing: 0.04em;
+  }
+  .modal-summary {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink);
+    font-weight: 500;
+    margin: 0 0 28px;
+    padding: 16px 18px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--primary);
+    border-radius: 8px;
+  }
+  .modal-section {
+    margin-bottom: 22px;
+  }
+  .modal-section:last-child {
+    margin-bottom: 0;
+  }
+  .modal-section-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .modal-section-text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .modal-paper-link {
+    display: inline-block;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .modal-paper-link:hover {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary);
+  }
+  .modal-loading {
+    padding: 64px 36px;
+    text-align: center;
+    color: var(--ink-muted);
+  }
+  .modal-loading .spinner {
+    margin: 0 auto 16px;
+  }
+  .modal-error {
+    margin: 36px;
+    padding: 14px 18px;
+    background: var(--high-bg);
+    border: 1px solid #E8B8B5;
+    border-left: 3px solid var(--high);
+    border-radius: 8px;
+    color: var(--high);
+    font-size: 14px;
+  }
+
   /* Footer */
   footer {
     margin-top: 60px;
@@ -1256,6 +1417,18 @@
 
 </div>
 
+<div class="modal-overlay" id="trial-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close-btn" aria-label="Close">×</button>
+    <div id="modal-content">
+      <div class="modal-loading">
+        <div class="spinner"></div>
+        <p>Loading…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const form = document.getElementById('trial-form');
 const submitBtn = document.getElementById('submit-btn');
@@ -1411,6 +1584,10 @@ function renderTrialCards(trials, container) {
 
     const card = document.createElement('article');
     card.className = 'trial-card';
+    card.dataset.trialName = t.name;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `Open deep-dive analysis for ${t.name}`);
     const yearStr = t.year ? Math.round(t.year) : '';
     const nStr = t.n ? Math.round(t.n) : '?';
     card.innerHTML = `
@@ -1426,6 +1603,18 @@ function renderTrialCards(trials, container) {
         ${link.label}<span class="arrow">→</span>
       </a>
     `;
+    // Open the deep-dive modal when the user clicks the card body.
+    // If they clicked the "View paper" link, let that link handle itself.
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.trial-card-link')) return;
+      openTrialModal(t.name, link);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openTrialModal(t.name, link);
+      }
+    });
     container.appendChild(card);
   });
 }
@@ -1548,6 +1737,98 @@ function fillExample(key) {
 
 document.querySelectorAll('.example-btn').forEach(btn => {
   btn.addEventListener('click', () => fillExample(btn.dataset.example));
+});
+
+// ----- Trial deep-dive modal -----
+
+const trialModal = document.getElementById('trial-modal');
+const modalContent = document.getElementById('modal-content');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+
+async function openTrialModal(trialName, paperLink) {
+  trialModal.hidden = false;
+  // Force a reflow so the transition applies, then add visible class
+  void trialModal.offsetWidth;
+  trialModal.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+
+  // Show loading state
+  modalContent.innerHTML = `
+    <div class="modal-loading">
+      <div class="spinner"></div>
+      <p>Loading deep-dive for <strong>${escapeHtml(trialName)}</strong>…<br><span style="font-size:12px;color:var(--ink-muted)">~15 seconds</span></p>
+    </div>
+  `;
+
+  try {
+    const response = await fetch('/api/explain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trial_name: trialName })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: 'Server error' }));
+      throw new Error(err.error || `Request failed (${response.status})`);
+    }
+
+    const data = await response.json();
+    renderTrialModalContent(data, paperLink);
+  } catch (err) {
+    modalContent.innerHTML = `<div class="modal-error">Could not load analysis: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderTrialModalContent(data, paperLink) {
+  const linkHtml = paperLink
+    ? `<a class="modal-paper-link" href="${paperLink.url}" target="_blank" rel="noopener noreferrer">${paperLink.label}<span style="margin-left:4px">→</span></a>`
+    : '';
+
+  modalContent.innerHTML = `
+    <div class="modal-content">
+      <p class="modal-eyebrow">Trial deep-dive</p>
+      <h2 class="modal-title" id="modal-title">${escapeHtml(data.name || '')}</h2>
+      <p class="modal-year">${data.year || ''}</p>
+
+      ${data.outcome_summary ? `<p class="modal-summary">${escapeHtml(data.outcome_summary)}</p>` : ''}
+
+      <div class="modal-section">
+        <p class="modal-section-label">What they tried</p>
+        <p class="modal-section-text">${escapeHtml(data.what_they_tried || '')}</p>
+      </div>
+
+      <div class="modal-section">
+        <p class="modal-section-label">What happened</p>
+        <p class="modal-section-text">${escapeHtml(data.what_happened || '')}</p>
+      </div>
+
+      <div class="modal-section">
+        <p class="modal-section-label">Why</p>
+        <p class="modal-section-text">${escapeHtml(data.why || '')}</p>
+      </div>
+
+      <div class="modal-section">
+        <p class="modal-section-label">What we learned</p>
+        <p class="modal-section-text">${escapeHtml(data.what_we_learned || '')}</p>
+      </div>
+
+      ${linkHtml}
+    </div>
+  `;
+}
+
+function closeTrialModal() {
+  trialModal.classList.remove('visible');
+  document.body.style.overflow = '';
+  setTimeout(() => { trialModal.hidden = true; }, 220);
+}
+
+modalCloseBtn.addEventListener('click', closeTrialModal);
+trialModal.addEventListener('click', (e) => {
+  if (e.target === trialModal) closeTrialModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !trialModal.hidden) closeTrialModal();
 });
 </script>
 
