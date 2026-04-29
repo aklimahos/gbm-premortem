@@ -452,9 +452,6 @@
     margin: 0;
   }
   .validation-match {
-    position: absolute;
-    top: 16px;
-    right: 16px;
     background: var(--low-bg);
     color: var(--low);
     font-size: 9.5px;
@@ -463,6 +460,8 @@
     text-transform: uppercase;
     padding: 3px 8px;
     border-radius: 999px;
+    flex-shrink: 0;
+    align-self: center;
   }
 
   /* Try-an-example buttons */
@@ -1751,10 +1750,12 @@
 
     <div class="validation-grid">
       <article class="validation-card">
-        <div class="validation-match">Match</div>
         <div class="validation-card-head">
-          <span class="validation-card-title">CENTRIC</span>
-          <span class="validation-card-year">2013</span>
+          <div>
+            <span class="validation-card-title">CENTRIC</span>
+            <span class="validation-card-year">· 2013</span>
+          </div>
+          <span class="validation-match">Match</span>
         </div>
         <p class="validation-card-design">Cilengitide added to standard care, n=545, MGMT-methylated newly-diagnosed GBM, OS endpoint.</p>
         <div class="validation-compare">
@@ -1772,10 +1773,12 @@
       </article>
 
       <article class="validation-card">
-        <div class="validation-match">Match</div>
         <div class="validation-card-head">
-          <span class="validation-card-title">AVAglio</span>
-          <span class="validation-card-year">2013</span>
+          <div>
+            <span class="validation-card-title">AVAglio</span>
+            <span class="validation-card-year">· 2013</span>
+          </div>
+          <span class="validation-match">Match</span>
         </div>
         <p class="validation-card-design">Bevacizumab + standard chemo and radiation, n=921, all-comers newly-diagnosed GBM, co-primary OS and PFS.</p>
         <div class="validation-compare">
@@ -1793,10 +1796,12 @@
       </article>
 
       <article class="validation-card">
-        <div class="validation-match">Match</div>
         <div class="validation-card-head">
-          <span class="validation-card-title">CheckMate-498</span>
-          <span class="validation-card-year">2019</span>
+          <div>
+            <span class="validation-card-title">CheckMate-498</span>
+            <span class="validation-card-year">· 2019</span>
+          </div>
+          <span class="validation-match">Match</span>
         </div>
         <p class="validation-card-design">Nivolumab vs temozolomide, n=560, MGMT-unmethylated newly-diagnosed GBM, OS endpoint.</p>
         <div class="validation-compare">
