@@ -55,7 +55,7 @@
     box-shadow: 0 1px 0 rgba(184, 106, 106, 0.04);
   }
   .appbar-inner {
-    max-width: 880px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 16px 28px;
     display: flex;
@@ -128,27 +128,26 @@
 
   /* Page container */
   .page {
-    max-width: 880px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 56px 28px 96px;
   }
 
   /* Hero */
   .hero {
-    margin-bottom: 36px;
-    display: flex;
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 1fr 220px;
     align-items: center;
-    gap: 12px;
+    gap: 60px;
   }
   .hero-text {
-    flex: 0 1 auto;
     min-width: 0;
-    max-width: 520px;
   }
   .hero-icon {
-    flex-shrink: 0;
-    width: 165px;
-    height: 165px;
+    width: 220px;
+    height: 220px;
+    justify-self: end;
     filter: drop-shadow(0 14px 28px rgba(155, 70, 70, 0.18)) drop-shadow(0 4px 8px rgba(155, 70, 70, 0.10));
   }
   .hero-icon svg {
@@ -156,14 +155,18 @@
     height: 100%;
     display: block;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 720px) {
     .hero {
-      flex-direction: column-reverse;
-      align-items: flex-start;
-      gap: 14px;
+      grid-template-columns: 1fr;
+      gap: 18px;
     }
-    .hero-text { max-width: none; }
-    .hero-icon { width: 110px; height: 110px; }
+    .hero-icon {
+      width: 110px;
+      height: 110px;
+      justify-self: start;
+      order: -1;
+    }
+    h1 { font-size: 38px; }
   }
   .eyebrow {
     font-size: 12px;
@@ -175,7 +178,7 @@
   }
   h1 {
     font-family: var(--serif);
-    font-size: 44px;
+    font-size: 56px;
     line-height: 1.1;
     letter-spacing: -0.02em;
     font-weight: 500;
@@ -183,11 +186,11 @@
     color: var(--ink);
   }
   .lede {
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.55;
     color: var(--ink-soft);
     margin: 0;
-    max-width: 560px;
+    max-width: 700px;
   }
 
   /* Explainer card */
