@@ -1,6 +1,7 @@
 // /api/analyze.js
 // Vercel serverless function: receives a trial design, calls Claude with the
 // embedded GBM trial database, returns structured analysis as JSON.
+// Deploy bump: 2026-04-29 force redeploy
 
 import Anthropic from "@anthropic-ai/sdk";
 import fs from "fs";
