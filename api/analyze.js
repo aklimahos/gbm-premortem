@@ -98,6 +98,7 @@ The JSON object must have exactly this shape:
   "verdict_headline": "Not worth conducting as designed.",
   "plain_explanation": "Two large trials with this exact design have already failed. Patients didn't live longer.",
   "verdict_summary": "One sentence, max 30 words.",
+  "redesign_suggestion": "Two to three sentences proposing concrete changes that would directly address the highest-severity patterns flagged. Speak to the trial designer. Reference specific changes (e.g., 'switch to MGMT-methylated patients only', 'replace co-primary with OS as single primary endpoint', 'add a biomarker enrichment strategy'). Always end with an actionable next step.",
   "patterns_flagged": [
     {
       "name": "Pattern name from PATTERN_LIBRARY",
@@ -125,6 +126,7 @@ Field constraints:
 - verdict_headline: 4-8 words, blunt, no jargon. For HIGH use phrasing like "Not worth conducting as designed." For MEDIUM use "Reconsider before running this." For LOW use "Worth pursuing as designed." Always end with a period.
 - plain_explanation: ONE sentence, max 25 words, plain English a university student understands. No abbreviations like OS/PFS/HR. No drug class jargon. Explain WHY in everyday terms (e.g. "Patients didn't live longer", "Tumor shrank but cancer still came back", "No similar trials in the database to compare against").
 - verdict_summary: ONE sentence, max 30 words. Technical clinical language is fine here. This is the detailed version.
+- redesign_suggestion: 2-3 sentences, max 70 words. Plain English, addresses the trial designer directly. Must reference at least one concrete change (e.g., a different endpoint, biomarker enrichment, dose schedule, comparator choice, or patient population). Should be specifically tied to the patterns_flagged. For LOW risk, you may say the design looks reasonable and just suggest minor refinements.
 - severity: must be exactly "HIGH" or "MEDIUM" or "LOW"
 - outcome: must be exactly "FAILED" or "SUCCEEDED" or "MIXED"
 - patterns_flagged: 1 to 4 items

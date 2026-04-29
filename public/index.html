@@ -808,6 +808,50 @@
     font-style: italic;
   }
 
+  /* Better plan card — the GPS recommending a route */
+  .redesign-card {
+    background: linear-gradient(135deg, #F2F6EC 0%, #E2EAD3 100%);
+    border: 1px solid #C2D0AC;
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 12px rgba(116, 138, 96, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .redesign-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--low), #95AB81);
+  }
+  .redesign-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--low);
+    font-weight: 700;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .redesign-eyebrow::before {
+    content: "→";
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .redesign-text {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
   .block {
     background: var(--surface);
     border: 1px solid var(--rule);
@@ -1666,6 +1710,11 @@
       <p class="verdict-summary" id="verdict-summary"></p>
     </div>
 
+    <div class="redesign-card" id="redesign-card" hidden>
+      <p class="redesign-eyebrow">Better plan</p>
+      <p class="redesign-text" id="redesign-text"></p>
+    </div>
+
     <div class="block">
       <div class="block-header"><p class="block-title">Failure patterns flagged</p></div>
       <div class="block-body" id="patterns"></div>
@@ -1863,6 +1912,16 @@ function renderResults(data) {
   document.getElementById('verdict-plain').textContent =
     data.plain_explanation || '';
   document.getElementById('verdict-summary').textContent = data.verdict_summary || '';
+
+  // Better plan card — show only if AI returned a redesign suggestion
+  const redesignCard = document.getElementById('redesign-card');
+  const redesignText = document.getElementById('redesign-text');
+  if (data.redesign_suggestion && data.redesign_suggestion.trim()) {
+    redesignText.textContent = data.redesign_suggestion;
+    redesignCard.hidden = false;
+  } else {
+    redesignCard.hidden = true;
+  }
 
   const patternsEl = document.getElementById('patterns');
   patternsEl.innerHTML = '';
