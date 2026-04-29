@@ -40,6 +40,63 @@
     background-attachment: fixed;
   }
 
+  /* Dashboard shell */
+  .app-shell { display: flex; min-height: 100vh; align-items: stretch; }
+  .sidebar {
+    width: 240px; flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--rule);
+    display: flex; flex-direction: column;
+    padding: 28px 0 18px;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar-brand { padding: 0 24px 22px; margin-bottom: 14px; border-bottom: 1px solid var(--rule-soft); }
+  .sidebar-brand-title {
+    font-family: var(--serif); font-size: 18px; font-weight: 600;
+    color: var(--ink); margin: 0 0 4px;
+    display: flex; align-items: center; gap: 10px;
+    letter-spacing: -0.01em;
+  }
+  .sidebar-brand-title .brand-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    flex-shrink: 0;
+  }
+  .sidebar-brand-sub {
+    font-size: 10.5px; color: var(--ink-muted);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 600; margin: 0;
+  }
+  .sidebar-nav { flex: 1; padding: 0 12px; display: flex; flex-direction: column; gap: 2px; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13.5px; color: var(--ink-soft);
+    text-decoration: none; font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    border-bottom: none;
+  }
+  .sidebar-nav a:hover { background: var(--rule-soft); color: var(--ink); border-bottom: none; }
+  .sidebar-nav a.active { background: var(--accent-soft); color: var(--primary); font-weight: 600; border-bottom: none; }
+  .sidebar-divider { height: 1px; background: var(--rule-soft); margin: 14px 24px; }
+  .sidebar-footer { padding: 0 24px; display: flex; flex-direction: column; gap: 12px; }
+  .sidebar-footer a {
+    color: var(--ink-muted); text-decoration: none;
+    font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 600;
+    border-bottom: none;
+  }
+  .sidebar-footer a:hover { color: var(--primary); border-bottom: none; }
+  .sidebar-footer .updated-pill {
+    font-size: 10px; color: var(--ink-muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 600; padding-top: 10px;
+    border-top: 1px solid var(--rule-soft); margin: 0;
+  }
+  .app-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  @media (max-width: 900px) { .sidebar { display: none; } }
+
   .appbar {
     background: var(--surface);
     border-bottom: 1px solid var(--rule);
@@ -253,19 +310,27 @@
 </head>
 <body>
 
-<header class="appbar">
-  <div class="appbar-inner">
-    <a class="brand" href="/">
-      <span class="brand-dot"></span>
-      glio.ai
-    </a>
-    <nav class="appbar-nav">
-      <a href="/database">Database</a>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <p class="sidebar-brand-title"><span class="brand-dot"></span>glio.ai</p>
+      <p class="sidebar-brand-sub">Oncology Trial Pre-Mortem</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/">New Trial</a>
+      <a href="/database">Historical Database</a>
       <a href="/about" class="active">Methodology</a>
       <a href="/disclaimer">Disclaimer</a>
     </nav>
-  </div>
-</header>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-footer">
+      <a href="mailto:aklimahos@gmail.com">Contact</a>
+      <a href="https://github.com/aklimahos/gbm-premortem" target="_blank" rel="noopener">GitHub</a>
+      <p class="updated-pill">Updated Apr 2026</p>
+    </div>
+  </aside>
+
+  <div class="app-main">
 
 <main class="page">
 
@@ -431,6 +496,9 @@
   </div>
   Independent project · Not affiliated with any pharmaceutical company or regulatory body
 </footer>
+
+  </div>
+</div>
 
 </body>
 </html>
